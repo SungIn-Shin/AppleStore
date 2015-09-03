@@ -1,4 +1,4 @@
-package com.applestore.sungin;
+package com.applestore.exam;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -19,6 +19,7 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	private String tilesView;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -33,7 +34,15 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "home";
+		return "login";
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginView(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.", locale);
+		System.out.println("호출됨");
+		tilesView = "client.login.login";
+		return tilesView;
 	}
 	
 }
