@@ -22,7 +22,7 @@ public class SLKPReceiver extends Thread {
 	private String ip;
 	
 	public SLKPReceiver(Socket socket, SLKPServer server) {
-		//
+		// 안녕하세요 어우어우~
 		try {
 			this.server = server;
 			this.socket = socket;
