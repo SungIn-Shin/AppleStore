@@ -1,28 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+<beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- annotation config & scan -->
+<!-- 	<context:annotation-config /> -->
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<context:component-scan base-package="com.applestore.exam" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan>
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<!--
+		JSR-303 support will be detected on classpath and enabled automatically
+	-->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+				<property name="supportedMediaTypes" value="application/json" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
+	<!--
+		DispatcherServlet이 처리하지 못한 요청을 서블릿 컨테이너의 DefaultServlet에게 넘겨주는 역할을 하는 핸들러
+		js, css 및 image 와 같이 서블릿에서 처리하지 못하는 것을 DefaultServlet에게 넘겨준다.
+	-->
+	<mvc:default-servlet-handler/>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
+<!-- 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 		<property name="prefix" value="/WEB-INF/views/" /> -->
+<!-- 		<property name="suffix" value=".jsp" /> -->
+<!-- 	</bean> -->
 	
-	<context:component-scan base-package="com.applestore.sungin" />
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">
+		<property name="contentNegotiationManager">
+			<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<property name="mediaTypes">
+					<value>
+						json=application/json;charset=UTF-8
+						jsonp=javascript/jsonp;charset=UTF-8
+					</value>
+				</property>
+				<property name="ignoreAcceptHeader" value="true" />
+			</bean>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<!-- JSON 요청을 처리할 뷰 -->
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+				<!-- JSONP 요청을 처리할 뷰 -->
+<!-- 				<bean class="com.iheart.sample.web.JSONPView"> -->
+<!-- 					<property name="contentType" value="javascript/jsonp"/> -->
+<!-- 				</bean> -->
+
+			</list>
+		</property>
+	</bean>
+
 	
-	
-	
-</beans:beans>
+	<!-- 아래 타일즈를 위한  TilesViewResolver, TilesConfigurer는 스프링3.2 이상에서만...-->
+	<bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" p:order="2">
+	</bean>
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"> 
+		<property name="definitions">
+			<list> 
+				<value>/WEB-INF/tiles/tiles.xml</value> 
+			</list> 
+		</property> 
+	</bean>
+
+</beans>

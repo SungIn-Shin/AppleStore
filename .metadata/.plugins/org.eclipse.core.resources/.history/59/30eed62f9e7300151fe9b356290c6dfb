@@ -1,0 +1,17 @@
+package com.iheart.slk.server;
+
+import java.net.Socket;
+
+public class SLKPSender extends Thread {
+	//
+	
+	public SLKPSender(Socket socket, SLKPServer server) {
+		//
+	}
+	
+	@Override
+	public void run() {
+		//
+		super.run();
+	}
+}

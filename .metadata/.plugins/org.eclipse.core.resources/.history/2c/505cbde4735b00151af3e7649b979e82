@@ -1,9 +1,0 @@
-package com.iheart.slkp.client;
-
-public class Test {
-	public static void main(String[] args) {
-	byte[] header = new byte[4];
-	String type ="CD";
-	header = type.getBytes();
-	}
-}

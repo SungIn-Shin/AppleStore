@@ -12,6 +12,17 @@
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\Users\성인\Downloads\zzzz\SLKP_Server2"/>
+			<item value="C:\Users\성인\Downloads\zzzz\SLKP_Client2"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.util"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.ui.swing"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.sp.socket"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.pr.socket"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.file"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.dom"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.da.jdbc"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.da.file"/>
+			<item value="C:\Users\성인\Downloads\우편번호 검색 시스템(File, Oracle)\com.namoo.incube.address.bl.pojo"/>
 			<item value="C:\Users\성인\Desktop\BackUp\2015-06-24 NIO채팅 백업(완료파일)\nio_chat_project"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">

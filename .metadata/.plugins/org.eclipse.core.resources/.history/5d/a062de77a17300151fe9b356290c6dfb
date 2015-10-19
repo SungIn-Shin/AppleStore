@@ -1,0 +1,60 @@
+package com.iheart.slk.server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+import java.util.Vector;
+
+public class SLKPServer {
+	//
+	private ServerSocket server;
+	private Socket socket;
+	private List<Socket> clients;
+	
+	public SLKPServer(){
+		//
+		try {
+			System.out.println("소캣 연결 대기중...");
+			server = new ServerSocket(9999);
+			clients = new Vector<>();
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		process();
+	}
+	
+	private void process() {
+		// 
+		while(true){
+			try {
+				socket = server.accept(); // 소켓이 연결될때까지 blocking
+				socket.setSoTimeout(10000);
+				System.out.println("소켓 연결!!");
+				System.out.println("Time Out " + "[" + socket.getSoTimeout() + "]");
+				System.out.println("연결 정보 [IP] " + socket.getRemoteSocketAddress());
+				System.out.println("연결 정보 [Port] " + socket.getPort());
+				System.out.println("========================================");
+				
+				//접속한 사용자 관리.
+				clients.add(socket);
+				
+				SLKPReceiver receiver = new SLKPReceiver(socket, this);
+				receiver.start();
+				
+			} catch (IOException e) {
+				//
+				e.printStackTrace();
+			}
+		}
+	}
+	//
+	
+
+	public static void main(String[] args) {
+		//
+		SLKPServer server = new SLKPServer();
+		server.process();
+	}
+}

@@ -178,7 +178,7 @@
 	<div class="tp-banner-container">
 		<div class="tp-banner">
 			<ul>
-				<li data-transition="fade" data-slotamount="7" data-thumb="/img/main/thumb1.png">
+				<li data-transition="fade" data-slotamount="7" data-thumb="img/main/thumb1.png">
 					<img src="img/header/main_bg_1.jpg"
 						class="first-image"
 						data-kenburns="on"
@@ -207,7 +207,7 @@
 						<img src="img/header/slide1-macbook.png" alt="원페이지">
 					</div>
 				</li>
-				<li data-transition="fade" data-slotamount="7" data-thumb="/img/main/thumb2.png">
+				<li data-transition="fade" data-slotamount="7" data-thumb="img/main/thumb2.png">
 					<img src="img/header/main_bg_2.jpg"
 						data-kenburns="on"
 						data-bgposition="center center"
@@ -245,7 +245,7 @@
 						<img src="img/header/slide2-iphone.png" alt="원페이지">
 					</div>
 				</li>
-				<li data-transition="fade" data-slotamount="7" data-thumb="/img/main/thumb3.png">
+				<li data-transition="fade" data-slotamount="7" data-thumb="img/main/thumb3.png">
 					<img src="img/header/main_bg_3.jpg"
 						data-kenburns="on"
 						data-bgposition="center center"
@@ -948,7 +948,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInX" src="/img/main/service_1.png" alt="원페이지">
+					<img class="img-responsive center-block wow flipInX" src="img/main/service_1.png" alt="원페이지">
 					<h4 class="item-title wow fadeInDown">반응형 원페이지<span class="hidden-xs"> 제작</span></h4>
 					<div class="item-desc word-break wow fadeInUp">
 						<span class="hidden-xs">원페이지는 </span>PC, 모바일, 패드 어느 환경에서도 유연하고 세련된 디자인으로 제작합니다.
@@ -958,7 +958,7 @@
 			
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInY" src="/img/main/service_2.png" data-wow-delay="0.3s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInY" src="img/main/service_2.png" data-wow-delay="0.3s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.3s">무제한 트래픽<span class="hidden-xs"> 제공</span></h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.3s">
 						<span class="hidden-xs">원페이지는 </span>추가 비용없이 최고속도의 서버를 무제한 트래픽으로 제공합니다.
@@ -969,7 +969,7 @@
 						
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInX" src="/img/main/service_3.png" data-wow-delay="0.6s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInX" src="img/main/service_3.png" data-wow-delay="0.6s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.6s"><span class="hidden-xs">끊임없는 </span>유지보수 관리</h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.6s">
 						<span class="hidden-xs">원페이지는 </span>문구수정, 이미지 수정부터 다양한 네트워크 오류까지 통합적으로 관리합니다.
@@ -979,7 +979,7 @@
 			
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInY" src="/img/main/service_4.png" data-wow-delay="0.9s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInY" src="img/main/service_4.png" data-wow-delay="0.9s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.9s">포털 사이트<span class="hidden-xs"> 등록</span></span></h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.9s">
 						<span class="hidden-xs">원페이지는 </span>네이버, 다음, 네이트등 국내의 모든 포털사이트에 사이트 등록 서비스를 제공합니다.
@@ -991,7 +991,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInX" src="/img/main/service_5.png" alt="원페이지">
+					<img class="img-responsive center-block wow flipInX" src="img/main/service_5.png" alt="원페이지">
 					<h4 class="item-title wow fadeInDown">지도검색<span class="hidden-xs"> 등록</span></h4>
 					<div class="item-desc word-break wow fadeInUp">
 						<span class="hidden-xs">원페이지는 </span>네이버, 다음, 구글 등 모든 지도에 검색될 수 있도록 등록 서비스를 제공합니다.
@@ -1001,7 +1001,7 @@
 			
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInY" src="/img/main/service_6.png" data-wow-delay="0.3s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInY" src="img/main/service_6.png" data-wow-delay="0.3s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.3s">문자메세지<span class="hidden-xs"> 서비스</span></h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.3s">
 						<span class="hidden-xs">원페이지는 </span>새로운 문의를 바로바로 확인 할 수 있게 문자 서비스를 제공합니다.
@@ -1012,7 +1012,7 @@
 						
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInX" src="/img/main/service_7.png" data-wow-delay="0.6s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInX" src="img/main/service_7.png" data-wow-delay="0.6s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.6s">웹로그 분석<span class="hidden-xs"> 연동</span></h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.6s">
 						<span class="hidden-xs">원페이지는 </span>네이버, 구글의 애널리틱스와 연동하여 가장 정확한 분석을 진행하실 수 있게 합니다.
@@ -1022,7 +1022,7 @@
 			
 			<div class="col-sm-3 col-xs-6">
 				<div class="item-wrap">
-					<img class="img-responsive center-block wow flipInY" src="/img/main/service_8.png" data-wow-delay="0.9s" alt="원페이지">
+					<img class="img-responsive center-block wow flipInY" src="img/main/service_8.png" data-wow-delay="0.9s" alt="원페이지">
 					<h4 class="item-title wow fadeInDown" data-wow-delay="0.9s">웹메일<span class="hidden-xs"> 서비스</span></h4>
 					<div class="item-desc word-break wow fadeInUp" data-wow-delay="0.9s">
 						<span class="hidden-xs">원페이지는 </span>네이버 메일과 연동하여 회사 도메인으로 웹메일을 이용 하실수 있게 합니다.
@@ -1219,7 +1219,7 @@
 		
 			<div class="wrapper">
 				<a href="http://goto.kakao.com/ivsirzi8" class="visible-xs btn pull-left katalk-qna-btn wow fadeInLeft">
-					<img src="/img/main/katalk-btn-img.png">
+					<img src="img/main/katalk-btn-img.png">
 					카카오톡 상담
 				</a>
 				<button type="button" class="btn pull-right slide-color-btn wow fadeInRight" data-toggle="modal" data-target="#qna_modal">Q&amp;A 쓰기</button>
@@ -1383,7 +1383,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-2">
-				<img class="img-responsive center-block" src="/img/logo_big.png" alt="원페이지">
+				<img class="img-responsive center-block" src="img/logo_big.png" alt="원페이지">
 			</div>
 			<div class="col-sm-10">
 				<ul class="list-inline company-info">

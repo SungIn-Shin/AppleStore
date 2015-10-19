@@ -1,0 +1,11 @@
+package com.iheart.slkp.client;
+
+public class SLKException extends Exception {
+	public SLKException(){
+		
+	}
+	
+	public SLKException(String message){
+		super(message);
+	}
+}

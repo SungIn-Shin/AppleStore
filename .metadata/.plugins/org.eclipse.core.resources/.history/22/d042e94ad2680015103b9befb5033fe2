@@ -1,0 +1,191 @@
+package com.iheart.slkp.client;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+
+/**
+ * @author 성인
+		* --2Byte---2Byte----------가변길이------
+		*|		|		|					|
+		*|Type	|Length	|	Message			|
+		*|		|		|					|
+		* ------------------------------------
+ */
+public class SLKPClientMain {
+	//
+	
+	private DataInputStream dis;	
+	private DataOutputStream dos;
+	private Socket socket;
+	private String ip;
+	private int port;
+
+	public SLKPClientMain() {
+		//
+		ip = "192.168.0.177";
+		//port = 7777;
+		//ip = "127.0.0.1";
+		//ip = "192.168.0.178";
+		port = 9999;	
+		process();
+	}
+
+	private void process() {
+		//
+		BufferedReader br = null;
+		String msg = "";
+		String id = "";
+		String pwd = "";
+		
+		while(true){
+			//
+			try {
+				socket = new Socket(ip, port);
+				dis = new DataInputStream(socket.getInputStream());
+				dos = new DataOutputStream(socket.getOutputStream());
+				br = new BufferedReader(new InputStreamReader(System.in));
+				System.out.println("=========================");
+				System.out.println("1. 사용자 인증");
+				System.out.println("2. 메세지 전송");
+				System.out.println("=========================");
+				
+				
+				
+				msg = br.readLine();
+				
+				if(msg.equals("1")){
+					//
+					println("사용자 아이디를 입력하세요");
+					id = br.readLine();
+					println("사용자의 비밀번호를 입력하세요");
+					pwd = br.readLine();
+					userAuthentication(id+"/"+pwd);
+				} else if(msg.equals("2")){
+					println("서버에게 전송할 메세지를 입력하세요");
+					msg = br.readLine();
+					sendMessage(msg);
+				}
+			} catch (UnknownHostException e) {
+				//
+				e.printStackTrace();
+			} catch (IOException e) {
+				//
+				e.printStackTrace();
+			} 
+		}
+	}
+	
+	private void println(String msg){
+		System.out.println("=========================");
+		System.out.println(msg);
+		System.out.println("=========================");
+	}
+
+
+	/**
+	 * @param userInfo
+	 * 사용자 인증 프로토콜 전송 Method
+	 * ab 와 id/pwd 형식으로 전송됨.
+	 */
+	private void userAuthentication(String userInfo) {
+		//
+		String type = "ab";
+		ByteBuffer bb = SLKPUtil.convertToProtocol(userInfo, type);
+				/** 여기까지 발신 **/
+				try {
+					dos.write(bb.array());
+					dos.flush();
+					readMessage();
+				} catch (IOException e) {
+					//
+					e.printStackTrace();
+				}
+	}
+
+	// 서버에게 메세지를 보내는 함수 : Type -> cd
+	private void sendMessage(String msg) {
+		//
+		String type = "cd";
+		
+		ByteBuffer bb = SLKPUtil.convertToProtocol(msg, type);
+		
+		/** 여기까지 발신 **/
+		try {
+			dos.write(bb.array());
+			dos.flush();
+			readMessage();
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void readMessage() throws IOException {
+		//
+		byte[] messageArr = null;
+		String type = "";
+		int len = 0;
+		String message = "";
+		
+		// Type
+		byte[] typeArr = null;
+		byte[] lenArr = null;
+		// 앞에서 4바이트 (Header)만 읽어들인다
+		typeArr = readHeader(typeArr, 2);
+		lenArr = readHeader(lenArr, 2);
+		
+		type = new String(typeArr);
+		System.out.println("Type : " + type);
+
+		len = SLKPUtil.byteArrayToShort(lenArr, 0);
+		System.out.println("Length : " + len);
+	
+		if(type.equals("bc")){
+			messageArr = new byte[len];
+			for (int i = 0; i < len; i++) {
+				messageArr[i] = dis.readByte();
+			}
+			message = new String(messageArr).trim();
+			println("서버 >> " + message);
+			if(message.equals("fail")){ 
+				// 사용자 인증 실패시 프로세스 종료
+				processClose();
+			}
+		} else if( type.equals("cd")){
+			messageArr = new byte[len];
+			for (int i = 0; i < len; i++) {
+				messageArr[i] = dis.readByte();
+			}
+			message = new String(messageArr).trim();
+			println("서버 >> " + message);
+		} else { // Type 이 bc와 cd가 아닐경우 프로세스 종료.
+			//
+			processClose();
+		}
+	}
+	
+	private byte[] readHeader(byte[] byteArr, int headerSize) throws IOException {
+		//
+		byteArr = new byte[headerSize];
+		for (int i = 0; i < headerSize; i++) {byteArr[i] = dis.readByte();}
+		return byteArr;
+	}
+	
+	private void processClose(){
+		//
+		System.out.println("잘못된 접근으로 서비스가 종료됩니다.");
+		System.exit(-1);
+	}
+
+	public static void main(String[] args) throws IOException {
+		//
+		new SLKPClientMain();
+	}
+}

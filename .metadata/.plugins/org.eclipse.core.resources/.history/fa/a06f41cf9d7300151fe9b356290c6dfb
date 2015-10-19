@@ -1,0 +1,31 @@
+package com.iheart.slk.server;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class SLKPReceiver extends Thread {
+	//
+	private SLKPServer server;
+	private Socket socket;
+	private DataInputStream dis;
+	public SLKPReceiver(Socket socket, SLKPServer server) {
+		//
+		try {
+			this.server = server;
+			this.socket = socket;
+			this.dis = new DataInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+	}
+	//
+	
+}

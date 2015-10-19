@@ -2,22 +2,25 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Charset" key="selection"/>
+		<item value="" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="Charset"/>
-			<item value="file"/>
-			<item value="jstl"/>
-			<item value="hashover"/>
-			<item value="tp-banner"/>
-			<item value="previre4"/>
-			<item value="What we do."/>
-			<item value="BUSINESS"/>
+			<item value="[DataOutputStream 으로 write하는데 에러가나는듯함. 일단 체크.]"/>
+			<item value="DataInputStream - IOException -&gt;"/>
+			<item value="serverSoket.acc"/>
+			<item value="socket.accep"/>
+			<item value="socket.a"/>
+			<item value="보내기"/>
+			<item value="returnArr"/>
+			<item value="disConnectUser"/>
 		</list>
 		<list key="replacehistory">
+			<item value="echoData"/>
+			<item value="disConnectClient"/>
+			<item value="readMessage"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

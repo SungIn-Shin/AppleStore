@@ -22,6 +22,13 @@
 			<item value="org.eclipse.wst.web.ui"/>
 		</list>
 	</section>
+	<section name="FileSystemExportWizard">
+		<item value="false" key="WizardFileSystemResourceExportPage1.STORE_OVERWRITE_EXISTING_FILES_ID"/>
+		<item value="false" key="WizardFileSystemResourceExportPage1.STORE_CREATE_STRUCTURE_ID"/>
+		<list key="WizardFileSystemResourceExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="C:\Users\성인\Desktop"/>
+		</list>
+	</section>
 	<section name="ImportExportAction">
 		<item value="org.eclipse.ui.wizards.export.ZipFile" key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID"/>
 		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
@@ -36,6 +43,13 @@
 		<item value="true" key="WizardZipFileResourceExportPage1.STORE_COMPRESS_CONTENTS_ID"/>
 		<item value="true" key="WizardZipFileResourceExportPage1.STORE_CREATE_STRUCTURE_ID"/>
 		<list key="WizardZipFileResourceExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="C:\Users\성인\Desktop\zipFilep.zip"/>
+			<item value="C:\Users\성인\Desktop\ㄴㅁㅇㅁㄴㅇㅁㄴㅇ111p.zip"/>
+			<item value="C:\Users\성인\Desktop\ㄴㅁㅇㅁㄴㅇㅁㄴㅇp.zip"/>
+			<item value="C:\Users\성인\Desktop\2015-10-08-backup.zip"/>
+			<item value="C:\Users\성인\Desktop\팀 커피 + 리뷰 빵입니다111.zip"/>
+			<item value="C:\Users\성인\Desktop\팀 커피 + 리뷰 빵입니다.zip"/>
+			<item value="C:\Users\성인\Desktop\socketProgram.zip"/>
 			<item value="C:\Users\성인\Desktop\client.zip"/>
 		</list>
 	</section>

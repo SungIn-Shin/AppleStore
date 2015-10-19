@@ -1,0 +1,41 @@
+package com.iheart.slk.server;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class SLKPReceiver extends Thread {
+	//
+	private SLKPServer server;
+	private Socket socket;
+	private DataInputStream dis;
+	////////////////////////////////////
+	private byte[] typeArr, lenArr;
+	
+	
+	
+	public SLKPReceiver(Socket socket, SLKPServer server) {
+		//
+		try {
+			this.server = server;
+			this.socket = socket;
+			this.dis = new DataInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void run() {
+		//
+		while(true){
+			// 스트림의 2바이트를 읽어와 typeArr에 담는다. return - 읽어온 바이트 수
+			int typeReadCount = dis.read(typeArr, 0, 2);
+			// 위에서 읽은 바이트 다음 2바이트를 읽어오 lenArr에 담는다. return - 읽어온 바이트 수
+			int lenReadCount = dis.read(lenArr, 0, 2);
+		}
+	}
+	//
+	
+}

@@ -1,0 +1,112 @@
+package com.iheart.slk.server;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+public class SLKPServer {
+	//
+	private ServerSocket server;
+	private Socket socket;
+	private Map<Socket, DataOutputStream> clients;
+	private DataOutputStream dos;
+	
+	private String id, pwd;
+	
+	public SLKPServer(){
+		//
+		try {
+			System.out.println("소캣 연결 대기중...");
+			server = new ServerSocket(9999);
+			clients = new HashMap<>();
+			this.id = "test";
+			this.pwd = "test";
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		process();
+	}
+	
+	private void process() {
+		// 
+		while(true){
+			try {
+				socket = server.accept(); // 소켓이 연결될때까지 blocking
+				socket.setSoTimeout(10000);
+				dos = new DataOutputStream(socket.getOutputStream());
+				System.out.println("소켓 연결!!");
+				System.out.println("Time Out " + "[" + socket.getSoTimeout() + "]");
+				System.out.println("연결 정보 [IP] " + socket.getRemoteSocketAddress());
+				System.out.println("연결 정보 [Port] " + socket.getPort());
+				System.out.println("========================================");
+				
+				//접속한 사용자 관리.
+				clients.put(socket, dos);
+				getClientSize();
+				SLKPReceiver receiver = new SLKPReceiver(socket, this);
+				receiver.start();
+				
+			} catch (IOException e) {
+				//
+				e.printStackTrace();
+			}
+		}
+	}
+	//
+	
+	
+	/**
+	 * @param sendMessage
+	 * 모든 list 사용자에게 메세지 전송.
+	 */
+	public void broadCast(byte[] sendMessage){
+		Iterator<Socket> it = clients.keySet().iterator();
+		try {
+			
+			while(it.hasNext()){
+				Socket client = it.next();
+				clients.remove(socket);
+			}
+			for(DataOutputStream dos : clients){
+				dos.write(sendMessage);
+				dos.flush();
+			}
+			
+		} catch (IOException e) {
+			// DataOutputStream IOException
+			e.printStackTrace();
+		}
+	}
+	
+	public void removeClient(Socket socket){
+		
+		clients.remove(socket);
+	}
+	
+	public void getClientSize(){
+		System.out.println("접속자 수 : " + clients.size());
+	}
+	
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+
+	public static void main(String[] args) {
+		//
+		SLKPServer server = new SLKPServer();
+		server.process();
+	}
+}

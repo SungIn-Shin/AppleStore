@@ -1,0 +1,38 @@
+package com.iheart.slkp.client;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+import com.iheart.slkp.server.SLKPUtil;
+
+public class Test {
+	public static void main(String[] args) {
+		//
+		
+		try {
+			Socket socket = new Socket("localhost", 9999);
+			
+			// 서버에 데이터 전송
+			OutputStream output = socket.getOutputStream();
+			
+			output.write(SLKPUtil.convertToProtocol("test/test", "ab"));
+			output.flush();
+			
+			//2초 대기
+			Thread.sleep(2000);
+			
+			//서버에서 받은 데이터 
+			InputStream input = socket.getInputStream();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+}

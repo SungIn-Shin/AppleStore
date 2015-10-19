@@ -1,0 +1,32 @@
+package com.iheart.slkp.client;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+
+public class Test {
+	public static void main(String[] args) {
+		//
+		
+		try {
+			Socket socket = new Socket("localhost", 9999);
+			
+			OutputStream output = socket.getOutputStream();
+			
+			output.write(1);
+			output.flush();
+			
+			Thread.sleep(5000);
+			
+			output.write(SLKPUtil.convertToProtocol("test/test", "ab"));
+			output.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+	}
+}

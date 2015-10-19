@@ -1,0 +1,250 @@
+package com.iheart.slkp.server;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class SLKPServerMain {
+	//
+	private ExecutorService executorService;
+	private ServerSocket serverSoket;
+	private List<Client> connections = new Vector<>();
+	
+	/**
+	 * 서버 시작 코드.
+	 * 
+	 */
+	public void startServer(){
+		// CPU 코어의 개수만큼 스레드를 생성한다.
+		executorService = Executors.newFixedThreadPool(5);
+		
+		// ServerSocket 생성 및 포트 바인딩
+		try {
+			serverSoket = new ServerSocket();
+			serverSoket.bind(new InetSocketAddress("localhost", 9999));
+		} catch (IOException e) {
+			if(!serverSoket.isClosed()) {stopServer();}
+			return;
+		}
+		
+		// 연결 수락 코드.
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				// 
+				System.out.println("서버 시작!");
+				while(true){
+					try {
+						Socket socket = serverSoket.accept();
+						String message = "[연결 수락 : " + socket.getRemoteSocketAddress() + ": " 
+								+ Thread.currentThread().getName() + "]";
+						System.out.println(message);
+						
+						Client client = new Client(socket);
+						System.out.println("Client 객체 생");
+						connections.add(client); // Client 객체 저장
+						System.out.println("[연결 개수 : " + connections.size() + "]");
+					} catch (IOException e) {
+						if(!serverSoket.isClosed()){
+							stopServer();
+						}
+						break;
+					}
+				}
+			}
+		};
+		executorService.submit(runnable);
+	}
+	
+	/**
+	 * 서버 종료 코드.
+	 */
+	public void stopServer(){
+		try {
+			Iterator<Client> iterator = connections.iterator();
+			while(iterator.hasNext()){
+				Client client = iterator.next();
+				client.socket.close();
+				iterator.remove();
+			}
+			// ServerSocket 닫기
+			if(serverSoket != null && !serverSoket.isClosed()){
+				serverSoket.close();
+			}
+			// ExecutorServer 종료
+			if(executorService != null && !executorService.isShutdown()){
+				executorService.shutdown();
+			}
+		} catch (IOException e) {
+		}
+	}
+	
+	/**
+	 * @author SungIn
+	 * 
+	 */
+	class Client{
+		//
+		// 사용자 인증 ID, PWD - 나중에 DB사용예정.
+		private String id, pwd;
+		// 접속한 사용자의 인증 여부.( ID, PWD 가 정확한지. )
+		private boolean isUserConfirm;
+		private Socket socket;
+		private SocketAddress userIp;
+		public Client(Socket socket){
+			id = "test";
+			pwd = "test";
+			isUserConfirm = false;
+			this.socket = socket;
+			userIp = socket.getRemoteSocketAddress();
+			receive();
+		}
+		
+		//데이터 받기 코드.
+		public void receive(){
+			//
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					//
+					while(true){
+						try {
+							System.out.println(userIp + "님의 로그인 상태 : " + isUserConfirm);
+							byte[] typeArr = new byte[2];
+							byte[] lenArr = new byte[2];
+							
+							DataInputStream dis = new DataInputStream(socket.getInputStream());
+							
+							/** 패킷 분석 **/
+							int typeByteCount = dis.read(typeArr, 0 , 2);
+							String type = new String(typeArr, 0, typeByteCount, "UTF-8");
+							System.out.println("Type : " + type);
+							int lenByteCount = dis.read(lenArr, 0, 2);
+							
+							short len = SLKPUtil.BytesToShort(lenArr, 1);
+							System.out.println("Length : " + len);
+							
+							byte[] bodyArr = new byte[len];
+							int bodyByteCount = dis.read(bodyArr, 0, len);
+							String body = new String(bodyArr, 0, bodyByteCount, "UTF-8");
+							System.out.println("Body ->" + body);
+							System.out.println("카운트 ->" + bodyByteCount);
+							/** 패킷 분석 **/
+							
+							byte[] echoData = null;
+							
+							if(!isUserConfirm && type.equals("cd")){ // 인증되지 않은 유저가 메세지 전송을 시도하면.
+								//
+								echoData = SLKPUtil.convertToProtocol("fail", "bc");
+								//3초 대기 후 클라이언트 접속 종료.
+								disConnectClient();
+							} else { //인증된 사용자가 접근을 하면.
+								if(type.equals("ab")){
+									echoData = userConfirm(body);
+								} else if(type.equals("cd")){
+									echoData = SLKPUtil.convertToProtocol(body + "니가보낸 메세지다.", "cd");
+								} else {
+									String msg = socket.getRemoteSocketAddress() + "에서 잘못된 접근을 시도하여 연결을 종료합니다.";
+									System.out.println(msg);
+									echoData = SLKPUtil.convertToProtocol(msg, "cd");
+									disConnectClient();
+								}
+							}
+							
+							//클라이언트가 보낸 문자를 모든 클라이언트에게 보냄
+							for(Client client : connections){
+								client.send(echoData);
+							}
+						} catch (IOException e) {
+							try {
+								String message = "[ 클라이언트 통신 안됨 : " + socket.getRemoteSocketAddress() + ": " + Thread.currentThread().getName() + " ]";
+								System.out.println(message);
+								connections.remove(Client.this);
+								socket.close();
+								break;
+							} catch (IOException e1) {
+							}
+						}
+					}
+				}
+
+				private void disConnectClient() throws IOException {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					connections.remove(Client.this);
+					socket.close();
+				}
+			};
+			executorService.submit(runnable); // 스레드풀에서 처리.
+		}
+		
+		protected byte[] userConfirm(String data) {
+			//
+			String[] userInfo  = data.split("/");
+			String userId = userInfo[0];
+			String userPwd = userInfo[1];
+			
+			if(userId.equals(id) && userPwd.equals(pwd)){
+				isUserConfirm = true;
+				return SLKPUtil.convertToProtocol("success", "bc");
+			} else {
+				isUserConfirm = false;
+				return SLKPUtil.convertToProtocol("fail", "bc");
+			}
+		}
+
+		// 데이터 전송 코드.
+		public void send(final byte[] data){
+			//
+			Runnable runnable = new Runnable() {
+				
+				@Override
+				public void run() {
+					//
+					try {
+						//클라이언트로 데이터를 다시 전송
+						
+						//byte[] byteArr = data.getBytes("UTF-8");
+						//서버로 데이터 보내
+						DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+						outputStream.write(data);
+						outputStream.flush();
+						System.out.println("[보내기 완료]");
+					} catch (Exception e) {
+						try {
+							String message = "[클라이언트 통신 안됨 : " + socket.getRemoteSocketAddress() + ": " + Thread.currentThread().getName() + " ]";
+							System.out.println(message);
+							connections.remove(Client.this);
+							socket.close();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} 
+				}
+			};
+			executorService.submit(runnable);
+		}
+		
+		
+	}
+	public static void main(String[] args) {
+	SLKPServerMain server = new SLKPServerMain();
+	server.startServer();
+	
+	} 
+}

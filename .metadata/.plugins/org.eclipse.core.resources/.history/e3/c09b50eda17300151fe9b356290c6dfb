@@ -1,0 +1,117 @@
+package com.iheart.slk.server;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
+
+import com.iheart.slk.util.SLKPUtil;
+
+public class SLKPReceiver extends Thread {
+	//
+	private SLKPServer server;
+	private Socket socket;
+	private DataInputStream dis;
+	////////////////////////////////////
+	private byte[] typeArr, lenArr, bodyArr;
+	private boolean isStop;
+	
+	public SLKPReceiver(Socket socket, SLKPServer server) {
+		//
+		try {
+			this.server = server;
+			this.socket = socket;
+			this.dis = new DataInputStream(socket.getInputStream());
+			this.typeArr = new byte[2];
+			this.lenArr = new byte[2];
+			isStop = true;
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void run() {
+		//
+		
+			try {
+				while(isStop){
+					// 스트림의 2바이트를 읽어와 typeArr에 담는다. return - 읽어온 바이트 수
+					int typeReadCount = dis.read(typeArr, 0, 2);
+					// 위에서 읽은 바이트 다음 2바이트를 읽어오 lenArr에 담는다. return - 읽어온 바이트 수
+					int lenReadCount = dis.read(lenArr, 0, 2);
+					
+					// read() 가 정상적으로 이뤄지면 읽어온 바이트를 반환.
+					// 소켓연결이 끊기면 -1 반환
+					if((typeReadCount == -1) || (lenReadCount == -1)){
+						throw new IOException("[IP : "+ socket.getRemoteSocketAddress() +"]"  + "[클라이언트의 연걸이 끊겼습니다.]");// 강제로 IOException을 발생시킴
+					}
+					
+					//바이트 개수 체크 Type - 2byte, len - 2byte
+					boolean isCorrectByteCount = checkHeaderByteCount(typeReadCount, lenReadCount);
+					//읽어온 바이트를 Type(String) len(short)로 구분해서 정확한 데이터가 들어왔는지 체크한다.
+					boolean isCorrectValue = checkHeaderValue(typeArr, lenArr);
+					
+					System.out.println("1 :" + typeReadCount);
+					System.out.println("2 :" + lenReadCount);
+					System.out.println("3 :" + isCorrectByteCount);
+					System.out.println("4 :" + isCorrectValue);
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
+	//
+	
+	
+	/**
+	 * @param typeArr
+	 * @param lenArr
+	 * @return
+	 * 헤더의 byte 값을 변환하여 데이터를 분석한다.
+	 * type - 'ab'(인증), 'cd'(양방향메세지)
+	 */
+	private boolean checkHeaderValue(byte[] typeArr, byte[] lenArr) {
+		//
+		boolean flag = true;
+		try {
+			String type = new String(typeArr, 0, 2, "UTF-8");
+			
+			short len = SLKPUtil.BytesToShort(lenArr, 1);
+			// type 이 'ab' 와 'cd' 만 허용한다.
+			// Client->Server 는 'ab' -인증 타입과, 'cd' - 양방향 전송만 할 수 있다.
+			if(type.equals("ab")){
+				flag = true;
+			} else if(type.equals("cd")){
+				flag = true;
+			}else {
+				flag = false;
+			}
+		} catch (UnsupportedEncodingException e) {
+			//
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	/**
+	 * @param typeReadCount
+	 * @param lenReadCount
+	 * @return
+	 * 헤더의 바이트 개수를 체크한다.
+	 * Type - 2Byte, len - 2Byte
+	 */
+	private boolean checkHeaderByteCount(int typeReadCount, int lenReadCount) {
+		//
+		boolean flag = true;
+		if(typeReadCount == -1 || typeReadCount == 0 || typeReadCount > 2){
+			flag = false;
+		} else if(lenReadCount == -1 || lenReadCount == 0 || lenReadCount > 2){
+			flag = false;
+		} 
+		return flag;
+	}
+}

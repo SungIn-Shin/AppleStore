@@ -1,0 +1,15 @@
+package com.iheart.slk.server;
+
+public class SLKPSender extends Thread {
+	//
+	
+	public public SLKPSender() {
+		//
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+	}
+}

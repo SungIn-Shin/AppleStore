@@ -1,0 +1,33 @@
+package com.iheart.slk.server;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+/**
+ * @author 성인
+ * 클라이언트가 보낸 데이터를 다시 전송해주는 Thread
+ */
+public class SLKPSender extends Thread {
+	//
+	private Socket socket;
+	private DataOutputStream dos;
+	private SLKPServer server;
+	public SLKPSender(Socket socket, SLKPServer server) {
+		//
+		try {
+			this.socket = socket;
+			this.server = server;
+			this.dos = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void run() {
+		//
+		super.run();
+	}
+}
