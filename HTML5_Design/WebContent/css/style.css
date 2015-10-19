@@ -1,0 +1,300 @@
+/*=================================================
+		00. 怨듯넻 
+=================================================*/
+body,
+.ui_modal{
+	padding: 0;
+}
+
+.loading-layer{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 100000;
+	
+	background-color: #333333;
+}
+
+.loading-layer .symbol{
+	-webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+
+.loading-layer .symbol h1{
+	font-size: 100px;
+	font-family: 'Montserrat',sans-serif;
+	font-weight: 900;
+	letter-spacing: -0.05em;
+	color: #FFFFFF;
+}
+
+
+.loading-layer .symbol h3{
+	margin-top: 0;
+	
+	font-size: 30px;
+	font-family: 'Montserrat',sans-serif;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+	color: #FFFFFF;
+}
+
+svg{
+	width: 100% !important;
+	height: 100% !important;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	.loading-layer .symbol h1{
+		font-size: 50px;
+	}
+	
+	.loading-layer .symbol h3{
+		font-size: 15px;
+	}
+}
+/*=================================================
+		01. 硫붿씤 �ㅻ퉬寃뚯씠��
+=================================================*/
+/*****#####===== �꾩껜 =====#####*****/
+#main-gnb {
+	position: fixed;
+	overflow: hidden;
+	
+	width: 100%;
+	top: 0;
+	background: none;
+	
+	z-index: 2000;
+	
+	-webkit-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#main-gnb.float{
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+/*****#####===== 濡쒓퀬 =====#####*****/
+#main-gnb .navbar-brand{
+	padding: 10px 0 0;
+}
+
+#main-gnb .navbar-brand img{
+	height: 34px;
+}
+
+/*****#####===== 踰꾪듉 =====#####*****/
+#main-gnb .navbar-header .nav-btn{
+	display: none;
+}
+
+
+/*****#####===== 由ъ뒪�� =====#####*****/
+#main-gnb .navbar-nav {
+	width: 100%;
+}
+
+#main-gnb .navbar-nav li a{
+	font-size: 16px;
+	text-align: center;
+	color: #CCCCCC;
+	
+	-webkit-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+#main-gnb .navbar-nav li:hover a,
+#main-gnb .navbar-nav li.active a{
+	background: none;
+	
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** md *****/
+@media (min-width: 992px) and (max-width: 1199px){
+
+}
+
+/***** sm *****/
+@media (min-width: 768px) and (max-width: 991px){
+	
+}
+
+/***** xs *****/
+@media (max-width: 767px){
+	#main-gnb .navbar-header{
+		position: relative;
+		overflow: hidden;
+	}
+	
+	#main-gnb .navbar-brand{
+		padding: 9px 10px 0;
+	}
+	
+	#main-gnb .navbar-brand img{
+		height: 30px;
+	}
+
+	
+	#main-gnb .navbar-header .nav-btn{
+		display: block;
+		position: relative;
+		float: right;
+		margin: 8px 10px 0 0;
+		padding: 4px;
+		
+		border: 1px solid #FFFFFF;
+		background: none;
+		
+		font-size: 22px;
+		line-height: 1;
+		color: #FFFFFF;
+	}
+	
+	#main-gnb .navbar-header .nav-btn.img-btn{
+		display: block;
+		width: 36px;
+		padding: 0;
+		
+		border: none;
+	}
+	
+	#main-gnb:not(.float) #menu-navbar{
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+	
+	#main-gnb #menu-navbar .navbar-nav{
+		margin: 0;
+		padding: 0;
+	}
+	
+	#main-gnb #menu-navbar .navbar-nav > li > a {
+		padding: 7px 0;
+	}
+}
+
+/*=================================================
+		02. �뱀뀡
+=================================================*/
+/*****#####===== �뱀뀡 �쇰컲 =====#####*****/
+header,
+section{
+	position: relative;
+	
+	text-align: center;
+}
+
+section{
+	padding: 80px 0 60px;
+}
+
+section.no-main{
+	padding: 30px 0;
+}
+
+.section.height-auto,
+.section.height-auto .fp-tableCell{
+	height: auto !important;
+}
+
+/*****#####===== �뱀뀡 ���댄� =====#####*****/
+.section-title-wrap{
+	margin-bottom: 40px;
+	
+	text-align: center;
+}
+
+.section-title{
+	margin: 0;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	font-size: 40px;
+	font-weight: 700;
+	letter-spacing: -2px;
+}
+
+.section-title-wrap .separator{
+	height: 3px;
+	margin-bottom: 20px;
+}
+
+.section-subtitle{
+	margin: 0;
+	
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** md *****/
+@media (min-width: 992px) and (max-width: 1199px){
+
+}
+
+/***** sm *****/
+@media (min-width: 768px) and (max-width: 991px){
+	
+}
+
+/***** xs *****/
+@media (max-width: 767px){
+	section{
+		padding: 65px 0 40px;
+	}
+	
+	.section-title-wrap{
+		margin-bottom: 20px;
+	}
+
+	.section-title{
+		margin-bottom: 10px;
+		
+		font-size: 35px;
+	}
+	
+	.section-subtitle{
+		font-size: 15px;
+	}
+}
+/*=================================================
+		02. 스타일
+=================================================*/
+footer{
+	padding: 20px 0;
+	
+	background-color: #333333;
+	
+	color: #FFFFFF;
+}
+
+footer .company-info{
+	margin: 0;
+}
+
+footer .company-info li{
+	line-height: 1.8;
+}
+
+footer hr{
+	border-top: 1px solid #111111;
+	border-bottom: 1px solid #555555;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	footer{
+		font-size: 12px;
+		text-align: center;
+	}
+}

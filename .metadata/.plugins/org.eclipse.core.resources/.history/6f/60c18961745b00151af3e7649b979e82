@@ -1,0 +1,16 @@
+package com.iheart.slkp.client;
+
+public class Test {
+	public static void main(String[] args) {
+	byte[] header = new byte[4];
+	String type ="CD";
+	int len = 12;
+	header = type.getBytes();
+	System.out.println(header[0]);
+	System.out.println(header[1]);
+	
+	header = SLKPUtil.intToByteArray(12);
+	System.out.println(header[2]);
+	System.out.println(header[3]);
+	}
+}

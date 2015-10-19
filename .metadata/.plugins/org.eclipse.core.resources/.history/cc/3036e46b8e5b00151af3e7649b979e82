@@ -1,0 +1,85 @@
+package com.iheart.slkp.client;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+
+/**
+ * @author 성인
+ *  --2Byte---2Byte----------가변길이------
+ * |		|		|					|
+ * |Type	|Length	|	Message			|
+ * |		|		|					|
+ *  ------------------------------------
+ */
+public class SLKPClientMain {
+	//
+	
+	private DataInputStream dis;	
+	private DataOutputStream dos;
+	private Socket socket;
+	private String ip;
+	private int port;
+
+	public SLKPClientMain() {
+		//
+		ip = "127.0.0.1";
+		port = 9999;
+		try {
+			socket = new Socket(ip, port);
+			dis = new DataInputStream(socket.getInputStream());
+			dos = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+	}
+
+	// 사용자 인증 프로토콜 전송 메서드 AB Type 사용
+	public void userAuthentication(String userInfo) {
+		//
+		String type = "AB";		
+		ByteBuffer bb = makeProtocol(userInfo, type);
+				
+				/** 여기까지 발신 **/
+				try {
+					dos.write(bb.array());
+					System.out.println("발신완료");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
+	}
+
+	// 서버에게 메세지를 보내는 함수 : Type -> CD
+	public void sendMessage(String msg) {
+		//
+		String type = "CD";
+		
+		ByteBuffer bb = makeProtocol(msg, type);
+		
+		/** 여기까지 발신 **/
+		try {
+			dos.write(bb.array());
+			System.out.println("발신완료");
+		} catch (IOException e) {
+			// 
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public static void main(String[] args) {
+		SLKPClientMain client = new SLKPClientMain();
+		//client.sendMessage("야이야이t");
+		client.userAuthentication("test/test");
+	}
+}

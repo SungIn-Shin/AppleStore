@@ -1,0 +1,9 @@
+package com.iheart.slkp.client;
+
+public class Test {
+	public static void main(String[] args) {
+		String type ="CD";
+		
+		System.out.println(type.getBytes());
+	}
+}

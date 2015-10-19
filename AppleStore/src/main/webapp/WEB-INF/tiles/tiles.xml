@@ -1,0 +1,46 @@
+<!DOCTYPE tiles-definitions PUBLIC 
+	"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<!-- Default Tiles Layout (좌측 메뉴 없음) -->
+	<definition name="layout.basic" template="/WEB-INF/views/tiles/layout.jsp">
+		<put-attribute name="title" value="AppleStore" />
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/views/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+	</definition>
+
+	<!-- Default Tiles Layout (좌측 메뉴 있음) -->
+	<definition name="layout.basic.menu" template="/WEB-INF/views/tiles/layout_login.jsp">
+		<put-attribute name="title" value="AppleStore" />
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/views/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+	</definition>
+
+	<!-- Main -->
+	<definition name="client.main" extends="layout.basic">
+		<put-attribute name="body" value="/WEB-INF/views/login/login.jsp" />
+	</definition>
+
+	<!-- Login -->
+<!-- 	<definition name="client.member.login" extends="layout.basic"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/member/login.jsp" /> -->
+<!-- 	</definition> -->
+
+	<!-- 전체 -->
+	<definition name="client.*.*" extends="layout.basic.menu">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+
+	<!-- 에러화면 -->
+	<definition name="client.error.error" extends="layout.basic.menu">
+		<put-attribute name="body" value="/WEB-INF/views/error/error.jsp" />
+	</definition>
+
+
+
+</tiles-definitions>

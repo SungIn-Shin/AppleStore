@@ -1,0 +1,936 @@
+/*=================================================
+		00. 怨듯넻 
+=================================================*/
+/*****#####===== �щ씪�대뱶 踰꾪듉 =====#####*****/
+.slide-color-btn{
+	display: inline-block;
+	position: relative;
+	margin: 15px 0;
+	padding: 18px 30px;
+	
+	background: none;
+	border: 1px solid #A2A3A4;
+	
+	font-family: 'Montserrat',sans-serif;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	
+	-webkit-transition:all 0.3s;
+    -moz-transition:all 0.3s;
+    -ms-transition:all 0.3s;
+    -o-transition:all 0.3s;
+    transition:all 0.3s;
+}
+
+.slide-color-btn:before{
+	content:"";
+	display:block;
+	position:absolute;
+	z-index:-1;
+	top:100%;
+	left:-1px;
+	bottom:0px;
+	right:-1px;
+	
+	background:#171a1c;
+	
+	-webkit-transition:all 0.3s;
+    -moz-transition:all 0.3s;
+    -ms-transition:all 0.3s;
+    -o-transition:all 0.3s;
+    transition:all 0.3s;
+}
+
+.slide-color-btn:hover{
+	color: #FFFFFF;
+}
+
+.slide-color-btn:hover:before{
+	top: -1px;
+}
+
+/*****#####===== 援щ텇�� =====#####*****/
+.separator{
+	display: inline-block;
+	width: 70px;
+	height: 1px;
+	background: #00D9EC;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/*****#####===== 寃뚯떆�� 移댄뀒怨좊━ =====#####*****/
+.bcat-btn-wrap{
+	margin-bottom: 60px;
+}
+
+.bcat-btn-wrap li{
+	margin-bottom: 10px;
+	padding: 0 20px;
+	
+	font-size: 16px;
+}
+
+.bcat-btn-wrap li .bcat-btn{
+	position: relative;
+	display: block;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	color: #AAAAAA;
+	
+	transition: all 0.5s ease-in-out;
+}
+
+.bcat-btn-wrap .bcat-btn.active,
+.bcat-btn-wrap .bcat-btn:hover{
+	font-weight: bold;
+	color: #222222;
+}
+
+.bcat-btn-wrap .bcat-btn .underline{
+	position: absolute;
+	display: block;
+	left: 0;
+	overflow: hidden;
+	width: 0;
+	height: 2px;
+	
+	background-color: #AEE9F6;
+	
+	transition: all 0.5s ease-in-out;
+}
+
+.bcat-btn-wrap .bcat-btn.active .underline,
+.bcat-btn-wrap .bcat-btn:hover .underline{
+	width: 100%;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	.bcat-btn-wrap{
+		margin-bottom: 30px;
+	}
+	
+	.bcat-btn-wrap li{
+		padding: 0 10px;
+	}
+}
+/*=================================================
+		01. Header
+=================================================*/
+header{
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	
+	color: #FFFFFF;
+}
+
+header h2{
+	margin: 20px 0;
+	
+	font-family: 'Montserrat',sans-serif;
+	font-weight: 700;
+	font-size: 100px;
+	line-height: 0.9;
+	letter-spacing: -0.05em;
+}
+
+header h5{
+	margin: 20px 0;
+	
+	font-family: 'Montserrat',sans-serif;
+	font-weight: 400;
+	text-transform: uppercase;
+	line-height: 1.2;
+	letter-spacing: 0.2em;  
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	header h2{
+		margin: 0 0 15px;
+		
+		font-size: 35px;
+	}
+	
+	header h5{
+		display: none;
+	}
+}
+
+/*=================================================
+		01. Intro Video
+=================================================*/
+#intro-video{
+	padding: 50px 0 30px;
+	
+	background-color: #B3BFC1;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** md *****/
+@media (min-width: 992px) and (max-width: 1199px){
+	#intro-video .video-container{
+		padding-bottom: 53.1%;
+	}
+}
+
+/***** sm *****/
+@media (min-width: 768px) and (max-width: 991px){
+	#intro-video .video-container{
+		padding-bottom: 52.014%;
+	}
+}
+
+/***** xs *****/
+@media (max-width: 767px){
+	#intro-video .video-container{
+		padding-bottom: 47.75%;
+	}
+}
+
+/*=================================================
+		02. What we do
+=================================================*/
+#what-we-do .item-wrap{
+	margin-bottom: 40px;
+}
+
+#what-we-do i{
+	width: 150px;
+	height: 150px;
+	
+	border-radius: 100%;
+	background-color: #00D9EC;
+	
+	font-size: 60px;	
+	color: #FFFFFF;
+	line-height: 150px;
+	
+	-webkit-transition:all 0.3s;
+	-moz-transition:all 0.3s;
+	-ms-transition:all 0.3s;
+	-o-transition:all 0.3s;
+	transition:all 0.3s;
+}
+
+#what-we-do i.grey{
+	background-color: #636363;
+}
+
+#what-we-do i:after {
+	position: absolute;
+	content: '';
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	
+	box-shadow: 0 0 0 4px #00D9EC;
+	
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	
+	top: -7px;
+	left: -7px;
+	padding: 7px;
+	
+	-webkit-transition:all 0.3s;
+	-moz-transition:all 0.3s;
+	-ms-transition:all 0.3s;
+	-o-transition:all 0.3s;
+	transition:all 0.3s;
+	
+	-webkit-transform: scale(0.8);
+	-moz-transform: scale(0.8);
+	-ms-transform: scale(0.8);
+	-o-transform: scale(0.8);
+	transform: scale(0.8);
+}
+
+#what-we-do i.grey:after{
+	box-shadow: 0 0 0 4px #636363;
+}
+
+
+#what-we-do i:hover{
+	font-size: 90px;
+}
+
+#what-we-do i:hover:after {
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	-ms-transform: scale(1);
+	transform: scale(1);
+	opacity: 1;
+}
+
+#what-we-do .item-title{
+	margin: 20px 0 10px;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	font-size: 18px;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#what-we-do i{
+		width: 120px;
+		height: 120px;
+		
+		font-size: 50px;
+		line-height: 120px;
+	}
+	
+	#what-we-do .item-title{
+		font-size: 15px;
+	}
+}
+
+/*=================================================
+		03. Feature
+=================================================*/
+#feature {
+	background-image: url('/feature_bg.jpg');
+}
+
+#feature .border-shape {
+	position: absolute;
+	display: block;
+	width: 320px;
+	height: 320px;
+	left: 50%;
+	margin-left: -160px;
+	
+	border: 1px solid #29676E;
+}
+
+#feature .border-shape > div{
+	margin-top: 20px;
+	
+	font-family: 'Cardo', serif;
+	font-size: 24px;
+	color: #FFFFFF;
+}
+
+#feature #feature-slider{
+	height: 250px;
+	
+	margin-top: 70px;
+}
+
+#feature #feature-slider .feature-title{
+	width: 100%;
+	margin: 0;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	font-size: 70px;
+	font-weight: 700;
+	color: #FFFFFF;
+}
+
+#feature #feature-slider .feature-desc{
+	width: 100%;
+	top: 110px;
+	
+	font-size: 20px;
+	color: #FFFFFF;
+	line-height: 1.7;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#feature .border-shape {
+		width: 220px;
+		height: 265px;
+		margin-left: -110px;
+	}
+	
+	#feature #feature-slider{
+		height: 200px;
+	}
+	
+	#feature #feature-slider .feature-title{
+		font-size: 35px;
+	}
+	
+	#feature #feature-slider .feature-desc{
+		top: 60px;
+		
+		font-size: 15px;
+	}
+}
+
+/*=================================================
+		04. Works
+=================================================*/
+#works .grid-sizer,
+#works .grid-item{
+	width: 33.3333%;
+}
+
+#works .slide-color-btn{
+	z-index: 10;
+	
+	color: #FFFFFF;
+}
+
+#works .slide-color-btn:before{
+	background:#FFFFFF;
+}
+
+#works .slide-color-btn:hover{
+	color: #171a1c;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#works .slide-color-btn{
+		display: none;
+	}
+}
+
+/*=================================================
+		05. Process
+=================================================*/
+#process{
+	padding-top: 20px;
+	
+	background-image: url('/img/main/process_bg.jpg');
+}
+
+#process .process-top-title{	
+	font-family: 'Cardo', serif;
+	font-size: 24px;
+	color: #FFFFFF;
+}
+
+#process .process-slider-wrapper{
+	position: relative;
+}
+
+/*****#####===== �꾨줈�몄뒪 諛� =====#####*****/
+#process .progress-bar{
+	display: block;
+	width: 100%;
+	height: 2px;
+	background: transparent;
+	border-bottom: 1px dotted #0C7984;
+	position: absolute;
+	top: 50%;
+}
+
+#process .progress-bar.start,
+#process .progress-bar.finish{
+	width: 80%;
+}
+
+#process .progress-bar.start{
+	right: 0
+}
+
+#process .progress-bar.finish{
+	left: 0
+}
+
+#process .progress-bar.start:before {
+	position: absolute;
+	left: 0;
+	display: block;
+	content: '';
+	width: 6px;
+	height: 6px;
+	background: #00d9ec;
+	top: -1px;
+	
+	border-radius: 50%;
+}
+
+#process .progress-bar.finish:before {
+	position: absolute;
+	right: 0;
+	display: block;
+	content: '';
+	width: 6px;
+	height: 6px;
+	background: #00d9ec;
+	top: -1px;
+	
+	border-radius: 50%;
+}
+
+/*****#####===== �꾨줈�몄뒪 �댁슜 =====#####*****/
+#process .process-wrap{
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+#process .process-wrap .process-title span{
+	display: inline-block;
+	
+	padding: 0 10px;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	font-size: 80px;
+	font-weight: bold;
+	line-height: 1em;
+	letter-spacing: -0.05em;
+	color: #FFFFFF;
+	
+	z-index: 100;
+}
+
+#process .process-wrap .process-icon{
+	display: inline-block;
+	margin: 10px 0;
+	
+	font-size: 70px;
+	color: #FFFFFF;
+	line-height: 1em;
+}
+
+#process .process-wrap .process-desc{
+	margin: 30px 0;
+	
+	font-size: 18px;
+	color: #D1D1D1;
+	line-height: 1.6;
+}
+
+/*****#####===== �щ씪�대뜑 �섏씠�� =====#####*****/
+#process .bx-pager{
+	bottom: -30px;	
+}
+
+#process .bx-pager .bx-pager-link{
+	border-radius: 0;
+	background: none;
+	width: auto;
+	height: auto;
+	
+	margin-right: 15px;
+
+	font-family: 'Montserrat',sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 2em;
+	letter-spacing: -0.05em;
+	text-align: right;
+	text-indent: 0;
+	text-decoration: none;
+	
+	border-bottom: 1px solid #888888;
+	
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+#process .bx-pager .bx-pager-link:hover{
+	color: #FFFFFF;
+	border-color: #FFFFFF;
+}
+
+#process .bx-pager .bx-pager-link:before{
+	content: '0';
+}
+
+#process .bx-pager .bx-pager-link.active{
+	padding-left: 20px;
+	
+	color: #FFFFFF;
+	border-color: #FFFFFF;
+}
+
+#process .bx-controls-direction a{
+	margin: 0;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#process .process-top-title {
+		font-size: 18px;
+	}
+	
+	#process .process-wrap .process-icon{
+		font-size: 40px;
+	}
+	
+	#process .process-wrap .process-title span {
+		font-size: 30px;
+	}
+	
+	#process .process-wrap .process-desc{
+		margin: 15px 0;
+		
+		font-size: 15px;
+	}
+	
+	#process .bx-pager .bx-pager-link{
+		font-size: 13px;
+	}
+}
+
+/*=================================================
+		06. Pricing
+=================================================*/
+.counter-wrap .counter{
+	font-family: 'Raleway', 'Nanum Gothic', sans-serif;
+	font-size: 120px;
+	font-weight: 900;
+}
+
+.counter-wrap small{
+	font-size: 30px;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#pricing{
+		padding-bottom: 0;	
+	}
+	
+	.counter-wrap .counter{
+		font-size: 80px;
+	}
+	
+	.counter-wrap small{
+		font-size: 20px;
+	}
+}
+
+/*=================================================
+		07. Responsive Web Design
+=================================================*/
+#responsive{
+	background-image: url('/img/main/res_bg.jpg');
+}
+
+#responsive #responsive-slider{
+	height: 550px;
+}
+
+#responsive #responsive-slider .pc{
+	left: 50%;
+	bottom: 80px;
+	
+	margin-left: -295.5px;
+}
+
+#responsive #responsive-slider .laptop{
+	left: 5%;
+	bottom: 25px;
+}
+
+#responsive #responsive-slider .pad{
+	right: 15%;
+	bottom: 25px;
+}
+
+#responsive #responsive-slider .phone{
+	right: 11%;
+	bottom: 0;
+}
+
+/*=================================================
+		08. Samples
+=================================================*/
+#sample .sample-img-wrap{
+	display: block;
+	margin-bottom: 20px;
+	
+	border: 1px solid #DDDDDD;
+}
+
+#sample .bx-wrapper .bx-next{
+	right: -25px;
+}
+
+#sample .bx-wrapper .bx-prev{
+	left: -25px;
+}
+
+#sample .bx-wrapper .bx-pager{
+	bottom: -30px;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#sample{
+		padding-bottom: 70px;
+	}
+
+	#sample .bx-wrapper .bx-next{
+		right: -10px;
+	}
+	
+	#sample .bx-wrapper .bx-prev{
+		left: -10px;
+	}
+}
+
+/*=================================================
+		09. Service
+=================================================*/
+#service{
+	background-image: url('/img/main/service_bg.jpg');
+}
+
+#service .item-wrap{
+	margin-bottom: 40px;
+}
+
+#service .item-wrap img{
+	width: 150px;
+}
+
+
+#service .item-wrap .item-title{
+	margin: 20px 0 10px;
+	
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (min-width: 1200px){
+	#service .item-wrap img{
+		width: 150px;
+	}
+}
+
+/*=================================================
+		10. 3 No
+=================================================*/
+.three-title{
+	margin: 0;
+	margin-bottom: 20px;
+	
+	font-family: 'Montserrat', 'Nanum Gothic';
+	font-size: 40px;
+	font-weight: 700;
+}
+
+.three-desc{
+	margin-bottom: 20px;
+	
+	line-height: 25px;
+}
+
+.three-desc strong{
+	font-family: 'Raleway', 'Nanum Gothic', sans-serif;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 25px;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	.three-title{
+		margin-bottom: 10px;
+		
+		font-size: 25px;
+	}
+	
+	.three-desc{
+		font-size: 13px;
+	}
+}
+
+/*=================================================
+		11. Period
+=================================================*/
+#period{
+	background-image: url('/img/main/period_bg.jpg');
+	
+	color: #FFFFFF;
+}
+
+/*=================================================
+		12. Q&A
+=================================================*/
+#qna .slide-color-btn{
+	margin: 5px 0;
+	padding: 13px 30px;
+}
+
+#qna .katalk-qna-btn{
+	background-color: #FFE800;
+	border: 1px solid #FFE800;
+	margin: 5px 0;
+	padding: 13px 10px;
+	
+	letter-spacing: 2px;
+}
+
+#qna .katalk-qna-btn img{
+	width: auto;
+	height: 20px;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#qna-board .status{
+		width: 80px;
+	}
+}
+
+/*=================================================
+		13. Contact
+=================================================*/
+#contact{
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 115px;
+	
+	background: rgba(0, 0, 0, 0.8);
+	
+	color: #FFFFFF;	
+}
+
+/*****#####===== 二쇱냼 �뺣낫 =====#####*****/
+#contact .contact-wrap{
+	text-align: left;
+}
+
+#contact .contact-wrap .contact-info{
+	margin-bottom: 20px;
+}
+
+#contact .contact-wrap .contact-info:last-child{
+	margin: 0;
+}
+
+#contact .contact-wrap p{
+	margin: 0;
+	
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	letter-spacing: 3px;
+}
+
+#contact .contact-wrap h2{
+	margin: 0;
+	
+	font-family: 'Montserrat', sans-serif;
+	font-size: 26px;
+	font-weight: 700;
+	letter-spacing: 2px;
+}
+
+#contact .contact-wrap h3{
+	margin: 0;
+	
+	font-size: 18px;
+	color: #DDDDDD;
+	line-height: 1.7;
+}
+
+/*****#####===== Form =====#####*****/
+#contact #contact-form .form-group{
+	text-align: left;	
+}
+
+#contact #contact-form label{
+	font-family: 'Montserrat',sans-serif;
+	font-size: 16px;
+	letter-spacing: 3px;
+	color: #FFFFFF;
+}
+
+#contact #contact-form .form-control{
+	margin-bottom: 30px;
+	padding: 10px 0;
+	
+	height: auto;
+	
+	font-size: 20px;
+	color: #FFFFFF;
+	
+	border: none;
+	border-bottom: 1px solid #FEFEFE;
+	background: transparent;
+}
+
+#contact #contact-form textarea.form-control{
+	height: 155px;
+	margin-bottom: 65px;
+}
+
+#contact .contact-btn{
+	padding: 10px 0;
+	
+	background-color: rgba(255, 255, 255, 0.2);
+	border: 1px solid #FFFFFF;
+	
+	font-family: 'Montserrat',sans-serif;
+	letter-spacing: 1px;
+}
+
+#contact .contact-btn:hover{
+	background-color: #00D8EB;
+}
+
+/*****#####===== 吏��� =====#####*****/
+#contact #map-canvas{
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -100;
+}
+
+/*****#####===== �ㅼ쐞移� =====#####*****/
+#contact .switch-wrap{
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	padding: 0 0 15px;
+	z-index: 20;
+	
+	text-align: center;
+}
+
+#contact .switch-wrap h4{
+	margin: 10px 0 0;
+	
+	font-family: 'Montserrat',sans-serif;
+}
+
+/*****#####===== 誘몃뵒�� 荑쇰━ =====#####*****/
+/***** xs *****/
+@media (max-width: 767px){
+	#contact{
+		padding-bottom: 80px;	
+	}
+	
+	#contact .contact-wrap h2{
+		font-size: 18px;
+	}
+	
+	#contact .contact-wrap h3{
+		font-size: 14px;
+	}
+}

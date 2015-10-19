@@ -1,0 +1,17 @@
+package com.iheart.slkp.client;
+
+public class Test {
+	public static void main(String[] args) {
+		String type ="CD";
+		
+		System.out.println(type.getBytes().length);
+		System.out.println(type.length());
+		
+		int len = type.length();
+		
+		byte[] ba = new byte[4];
+		ba[0] = (byte)((len >> 24) & 0xff);
+		ba[1] = (byte)((len >> 24) & 0xff);
+		
+	}
+}
