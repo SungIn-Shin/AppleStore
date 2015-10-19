@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException;
 import com.iheart.slk.util.SLKPUtil;
 
 public class SLKPReceiver extends Thread {
-	//
+	// 하하호호
 	private SLKPServer server;
 	private Socket socket;
 	private DataInputStream dis;
