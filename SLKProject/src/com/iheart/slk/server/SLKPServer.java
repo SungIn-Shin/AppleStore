@@ -73,6 +73,7 @@ public class SLKPServer {
 				Socket client = it.next();
 				DataOutputStream dos = clients.get(client);
 				dos.write(sendMessage);
+				dos.flush();
 			}
 			
 		} catch (IOException e) {

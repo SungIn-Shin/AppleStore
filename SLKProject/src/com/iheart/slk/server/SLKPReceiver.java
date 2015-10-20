@@ -113,6 +113,9 @@ public class SLKPReceiver extends Thread {
 				System.out.println(ip + "[read() 에서 문제 생김]");
 				removeAndCloseSocket();
 				e.printStackTrace();
+			} finally{ //무조건 실행.
+				//
+				removeAndCloseSocket();
 			}
 	}
 	//
