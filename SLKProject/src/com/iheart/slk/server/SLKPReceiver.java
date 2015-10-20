@@ -21,6 +21,9 @@ public class SLKPReceiver extends Thread {
 	private String id, pwd;
 	private String ip;
 	
+	
+	public static final String serverMsg = "-> [FROM SERVER ^^]";
+	
 	public SLKPReceiver(Socket socket, SLKPServer server) {
 		// 안녕하세요 어우어우~
 		try {
@@ -44,7 +47,6 @@ public class SLKPReceiver extends Thread {
 	@Override
 	public void run() {
 		//
-		
 			try {
 				while(isStop){
 					// 스트림의 2바이트를 읽어와 typeArr에 담는다. return - 읽어온 바이트 수
@@ -63,56 +65,63 @@ public class SLKPReceiver extends Thread {
 					//읽어온 바이트를 Type(String) len(short)로 구분해서 정확한 데이터가 들어왔는지 체크한다.
 					boolean isCorrectValue = checkHeaderValue(typeArr, lenArr);
 					
-					System.out.println("1 :" + typeReadCount);
-					System.out.println("2 :" + lenReadCount); 
-					System.out.println("3 :" + isCorrectByteCount); // 맞으면 true
-					System.out.println("4 :" + isCorrectValue); // 맞으면 true
+//					System.out.println("1 :" + typeReadCount);
+//					System.out.println("2 :" + lenReadCount); 
+//					System.out.println("3 :" + isCorrectByteCount); // 맞으면 true
+//					System.out.println("4 :" + isCorrectValue); // 맞으면 true
 					
-					String serverMsg = "-> [FROM SERVER ^^]";
+					
 					
 					if(isCorrectByteCount && isCorrectValue){
 						String type = new String(typeArr, 0, 2, "UTF-8");
 						short len = SLKPUtil.BytesToShort(lenArr, 1);
 						//short len = 5;
 						byte[] bodyArr = new byte[len];
-						
+						System.out.println("[사용자 Header Length] ->"+ len);
 						int bodyByteCount = dis.read(bodyArr, 0, len);
-						String body = new String(bodyArr, 0, bodyByteCount, "UTF-8");
+						System.out.println("[실제 Body 메세지를 읽어온 Length] ->"+ bodyByteCount);
 						
-						System.out.println("Type ->"+ type);
-						System.out.println("Length ->" + len);
-						System.out.println("Body ->" + body);
-						
-						if(type.equals("ab") && !userCheck){ //사용자가 ab를 보내고, 유저 인증상태가 false이면
-							// 사용자 인증 절차를 실행하라.
-							// 사용자 정보가 맞다면 userCheck 가 true로 바뀐다.
-							echoArr = userInfoCheck(body);
-							server.broadCastMessage(echoArr);
-						} else if(type.equals("ab") && userCheck){ // 이미 인증된 사용자가 다시 인증 요청을 한다면.
-							echoArr = SLKPUtil.convertToProtocol("이미 인증된 사용자입니다.", "cd");
-							server.broadCastMessage(echoArr);
-						}
-						else if(type.equals("cd") && userCheck){ // Type이 'cd'이고 사용자 인증이 완료된 경우.
-							//[사용자가 보낸 메세지 + 서버가보내는 메세지] 형식으로 사용자에게 보내준다.
-							echoArr = SLKPUtil.convertToProtocol(body + serverMsg, "cd");
-							server.broadCastMessage(echoArr);
+						if(bodyByteCount != len ){ 
+							// Header 의 Length와 Body를 읽어온 길이가 다르면..
+							System.out.println(ip + "[클라이언트가 전송한 실제 Body의 길이와, Header 패킷의 length가 일치하지 않습니다. 조작 의심]");
+							removeAndCloseSocket();
+						} else {
+							
+							String body = new String(bodyArr, 0, bodyByteCount, "UTF-8");
+							
+							System.out.println("[Type] ->"+ type);
+							System.out.println("[Length] ->" + len);
+							System.out.println("[Body] ->" + body);
+							
+							if(type.equals("ab") && !userCheck){ //사용자가 ab를 보내고, 유저 인증상태가 false이면
+								// 사용자 인증 절차를 실행하라.
+								// 사용자 정보가 맞다면 userCheck 가 true로 바뀐다.
+								echoArr = userInfoCheck(body);
+								server.broadCastMessage(echoArr);
+							} else if(type.equals("ab") && userCheck){ // 이미 인증된 사용자가 다시 인증 요청을 한다면.
+								echoArr = SLKPUtil.convertToProtocol("이미 인증된 사용자입니다.", "cd");
+								server.broadCastMessage(echoArr);
+							}
+							else if(type.equals("cd") && userCheck){ // Type이 'cd'이고 사용자 인증이 완료된 경우.
+								//[사용자가 보낸 메세지 + 서버가보내는 메세지] 형식으로 사용자에게 보내준다.
+								echoArr = SLKPUtil.convertToProtocol(body + serverMsg, "cd");
+								server.broadCastMessage(echoArr);
+							} 
 						} 
-					} else{ // 클라이언트가 보낸 데이터가 이상하면 그냥 종료시켜라.
+					}else{ // 클라이언트가 보낸 데이터가 이상하면 그냥 종료시켜라.
 						System.out.println(ip +"[클라이언트 패킷이 이상합니다.]");
 						removeAndCloseSocket();
 					}
 				}
-			} catch(SocketException e){
-				System.out.println(ip + "[클라이언트가 강제 종료를 했습니다.]");
-				removeAndCloseSocket();
 			} catch(SocketTimeoutException e){
-				System.out.println(ip + "[5초 이상 보내는 메세지가 없어서 연결을 끊습니다.]" + "[" + e.getMessage() + "]");
+				System.out.println(ip + "[10초 이상 보내는 메세지가 없어서 연결을 끊습니다.]" + "[" + e.getMessage() + "]");
 				removeAndCloseSocket();
 			} catch (IOException e) {
 				//
-				System.out.println(ip + "[read() 에서 문제 생김]");
+				System.out.println(ip + "[read() 에서 문제 생김]" + "[" + e.getMessage() + "]");
 				removeAndCloseSocket();
-				e.printStackTrace();
+			} finally{
+				System.out.println(currentThread().getName() +"[종료]");
 			}
 	}
 	//
@@ -140,20 +149,35 @@ public class SLKPReceiver extends Thread {
 	 */
 	private byte[] userInfoCheck(String body) {
 		//
-		String[] split = body.split("/");
-		String userId = split[0];
-		String userPwd = split[1];
+		String userId = "";
+		String userPwd = "";
+		byte[] result = null;
+		try {
+			String[] split = body.split("/");
+			userId = split[0];
+			userPwd = split[1];
+		
 		System.out.println("사용자 입력 아이디 : " + userId);
 		System.out.println("사용자 입력 비번 : " + userPwd);
 		
 		// 사용자 입력정보와 서버의 계정정보가 일치하면.
 		if(id.equals(userId) && pwd.equals(userPwd)){
 			userCheck = true;
-			return SLKPUtil.convertToProtocol("success", "bc");
+			result = SLKPUtil.convertToProtocol("success", "bc");
+			return result;
 		} else {
 			userCheck = false;
-			return SLKPUtil.convertToProtocol("fail", "bc");
+			result = SLKPUtil.convertToProtocol("fail", "bc");
+			return result;
 		}
+		
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// 
+			System.out.println(ip + "[클라이언트가 전송한 실제 Body의 길이와, Header 패킷의 length가 일치하지 않습니다. 조작 의심]");
+			removeAndCloseSocket();
+		}
+		
+		return result;
 	}
 	
 	/**
