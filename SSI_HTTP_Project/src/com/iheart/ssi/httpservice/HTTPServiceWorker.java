@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.iheart.ssi.httpparser.HTTPHeaderController;
@@ -18,12 +18,12 @@ public class HTTPServiceWorker extends Thread {
 	private DataOutputStream httpResponse;
 	private SocketServer server;
 	private Socket socket;
-	private HTTPHeaderController headerParser;
-	private Map<String, String> headerMap;
+	private HTTPHeaderController headerController;
 	
 	
 	//Logger
-	private Logger log = Logger.getLogger(HTTPServiceWorker.class);
+	private static final Logger log = Logger.getLogger(HTTPServiceWorker.class);
+	
 	public HTTPServiceWorker(Socket socket, SocketServer server) {
 		// 
 		this.socket = socket;
@@ -31,8 +31,7 @@ public class HTTPServiceWorker extends Thread {
 		try {
 			httpRequest = new DataInputStream(socket.getInputStream());
 			httpResponse = new DataOutputStream(socket.getOutputStream());
-			headerParser = new HTTPHeaderControllerImpl();
-			headerMap = new HashMap<>();
+			headerController = new HTTPHeaderControllerImpl();
 		} catch (IOException e) {
 			//
 			e.printStackTrace();
@@ -41,10 +40,16 @@ public class HTTPServiceWorker extends Thread {
 	@Override
 	public void run() {
 		//
-		while(true){
-			
-			headerMap = headerParser.parseHTTPHeader(httpRequest);
-		}
+		Map<String, String> resMap = new LinkedHashMap<String, String>();
+		String reqHeader = server.read(httpRequest, 8190);
+		System.out.println("================================================");
+		System.out.println("===================Request Header===============");
+		System.out.println(reqHeader);
+		System.out.println("===================Request Header===============");
+		System.out.println("================================================");
+		resMap = headerController.parseHTTPHeader(reqHeader);
+		byte[] responsHeader = headerController.createHTTPProtocol(resMap);
+		server.write(httpResponse, responsHeader);// write and flush
 	}
 	//
 }

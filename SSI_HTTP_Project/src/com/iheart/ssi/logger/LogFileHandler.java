@@ -74,8 +74,8 @@ public class LogFileHandler implements LogHandler {
 			synchronized (br) {
 				br.write(logMsg);
 				br.newLine();
+				br.flush();
 			}
-			br.flush();
 		} catch (IOException e) {
 			//
 			e.printStackTrace();

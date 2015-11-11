@@ -1,35 +1,41 @@
 package com.iheart.ssi.socket;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.iheart.ssi.httpservice.HTTPServiceWorker;
 
-public class SocketServer extends SocketMain{
+public class SocketServer extends SocketMain {
 	//
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private ExecutorService threadPool;
-	
-	public SocketServer(){
+
+	public SocketServer() {
 		//
-//		threadPool = Executors.
-		
+		// threadPool = Executors.
+
 		serverSocket = open(serverSocket, 9999);
+
 		process();
 	}
-	
-	public void process(){
+
+	public void process() {
 		//
-		while(true){
-			socket = accept(serverSocket);
-			HTTPServiceWorker workerThread = new HTTPServiceWorker(socket, this);
-			workerThread.start();
+		while (true) {
+			try {
+				socket = accept(serverSocket);
+				HTTPServiceWorker workerThread = new HTTPServiceWorker(socket, this);
+				workerThread.start();
+			} catch (IOException e) {
+				//
+				e.printStackTrace();
+			}
 		}
 	}
 	
+	
+
 	public static void main(String[] args) {
 		new SocketServer();
 	}

@@ -37,6 +37,7 @@ public class Logger {
 			synchronized (Logger.class) {
 				if(logger == null){
 					logger = new Logger(clazz);
+					logger.addHandler(new LogFileHandler()); //강제주입
 				}
 			}
 		}
@@ -47,14 +48,14 @@ public class Logger {
 	 * @param args
 	 * TestMain
 	 */
-	public static void main(String[] args) {
-//		Logger logger = Logger.getLogger();
-//		LogHandler handler = new LogFileHandler();
-//		logger.addHandler(handler);
-//		
-//		logger.debug("헤헤 이건 디버그.");
-//		logger.emerg("헤헤 이건 EMERG");
-	}
+//	public static void main(String[] args) {
+////		Logger logger = Logger.getLogger();
+////		LogHandler handler = new LogFileHandler();
+////		logger.addHandler(handler);
+////		
+////		logger.debug("헤헤 이건 디버그.");
+////		logger.emerg("헤헤 이건 EMERG");
+//	}
 	
 	public void emerg(String logMsg){
 		//

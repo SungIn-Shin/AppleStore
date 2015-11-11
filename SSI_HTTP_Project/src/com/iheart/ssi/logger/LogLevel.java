@@ -1,7 +1,5 @@
 package com.iheart.ssi.logger;
 
-import com.iheart.ssi.exception.LogNameNullPointerException;
-
 public class LogLevel {
 	private String name;
 	private int value;
@@ -30,8 +28,8 @@ public class LogLevel {
 		//
 		if(name == null){
 			try {
-				throw new LogNameNullPointerException();
-			} catch (LogNameNullPointerException e) {
+				throw new NullPointerException();
+			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
 		}

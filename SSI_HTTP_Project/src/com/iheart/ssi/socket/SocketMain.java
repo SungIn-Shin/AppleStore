@@ -3,26 +3,25 @@ package com.iheart.ssi.socket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import com.iheart.ssi.exception.SocketPortNumberException;
+import com.iheart.ssi.logger.Logger;
 
 public class SocketMain {
 	//
+	private static final Logger logger = Logger.getLogger(SocketMain.class);
 	/**
 	 * @param serverSocket
 	 * @return
+	 * @throws IOException 
 	 */
-	public Socket accept(ServerSocket serverSocket){
+	public Socket accept(ServerSocket serverSocket) throws IOException{		
 		Socket socket = null;
-		try {
-			socket = serverSocket.accept();
-		} catch (IOException e) {
-			//
-			e.printStackTrace();
-		}
+		socket = serverSocket.accept();
 		return socket;
 	}
 	
@@ -78,6 +77,28 @@ public class SocketMain {
 		return b;
 	}
 	
+	public String read(InputStream input, int arrSize){
+		byte[] reqArr = new byte[arrSize];
+		String str = "";
+		try {
+			int readCount = input.read(reqArr);
+			
+			if(readCount == -1){
+				logger.error("[클라이언트 강제 접속 종료.]");
+			}
+			
+			if(readCount > reqArr.length){ 
+				// Exception 발생
+			}
+			str = new String(reqArr, "UTF-8");
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		
+		return str;
+	}
+	
 	
 	/**
 	 * @param br
@@ -108,6 +129,18 @@ public class SocketMain {
 			socket.close();
 		} catch (IOException e) {
 			//
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void write(OutputStream output, byte[] writeArr){
+		try {
+			output.write(writeArr);
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

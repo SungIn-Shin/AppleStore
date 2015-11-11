@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class PropertyLoader {
 	private Properties properties;
-	private static final String PROP_FILEPATH = "D:\\Git\\AppleStore\\SSI_HTTP_Project\\src\\com\\iheart\\ssi\\logger\\logger.properties";
+	private static final String PROP_FILEPATH = "D:\\Git\\AppleStore\\SSI_HTTP_Project\\src\\com\\iheart\\ssi\\prop\\ssi.properties";
 	private static final PropertyLoader loader = new PropertyLoader();
 	
 	private PropertyLoader(){

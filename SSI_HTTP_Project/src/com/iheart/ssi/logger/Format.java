@@ -10,7 +10,7 @@ public class Format {
 	/**
 	 * com.iheart.ssi.logger 의 logger.config에서 주입.
 	 */
-	private PropertyLoader prop = PropertyLoader.getInstance();
+	PropertyLoader prop = PropertyLoader.getInstance();
 	private SimpleDateFormat formatter;
 	private LogLevel level;
 	private String userIP;
@@ -19,9 +19,7 @@ public class Format {
 	/**
 	 * 
 	 */
-	public Format(){
-		
-	}
+	public Format(){}
 	
 	/**
 	 * Log 작성되는 메세지 Format
