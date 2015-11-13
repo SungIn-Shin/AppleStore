@@ -1,8 +1,10 @@
 package com.iheart.ssi.util;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class PropertyLoader {
@@ -13,7 +15,7 @@ public class PropertyLoader {
 	private PropertyLoader(){
 		try {
 			properties = new Properties();
-			properties.load(new FileInputStream(PROP_FILEPATH));
+			properties.load(new BufferedReader(new InputStreamReader(new FileInputStream(PROP_FILEPATH), "UTF-8")));
 		} catch (FileNotFoundException e) {
 			//
 			e.printStackTrace();

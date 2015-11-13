@@ -1,7 +1,9 @@
 package com.iheart.ssi.logger;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -15,6 +17,8 @@ public class LogFileHandler implements LogHandler {
 	private File logFileFolder, logFile;
 	private PropertyLoader prop = PropertyLoader.getInstance();
 	private Format format;
+	
+	
 	
 	public LogFileHandler() {
 		//
@@ -38,15 +42,20 @@ public class LogFileHandler implements LogHandler {
 		// 생성할 로그 파일
 		// D:/HTTP/log_file/SSI_HTTP_2015-11-09.log
 		logFile = new File(filePath + fileName + fileNamePattern + ".log");
+		BufferedWriter bw = null;
 		try {
-			
+			bw = new BufferedWriter(new FileWriter(logFile, true));
 			if(!logFileFolder.exists()){ // 폴더가 없다면
 				//
 				logFileFolder.mkdirs(); // 폴더를 생성시키고
 			}
 			
-			if(!logFile.exists()){ // 로그파일이 없으면
+			if(!logFile.exists()){ // 로그파일이 없거나 아무것도 없으면
 				logFile.createNewFile(); // 로그파일을 생성시킨다.
+			}
+			
+			if(logFile.length() < 1){
+				createHeader(bw);
 			}
 			
 		} catch (IOException e) {
@@ -62,20 +71,26 @@ public class LogFileHandler implements LogHandler {
 	@Override
 	public void append(String logMsg) {
 		//
-		BufferedWriter br = null;
-		if(!logFile.exists()){ // 파일이 있을때 작성해야하겠죠.
-			createFile();
-		} 
+		BufferedWriter bw = null;
+		BufferedReader br = null;
+		
 		try {
-			br = new BufferedWriter(new FileWriter(logFile, true));
-			if(logFile.length() == 0){ // File의 크기가 0이면.. 즉 가장 처음 생성하는 시점에
-				createHeader(br); // 헤더를 생성한다.
+			br = new BufferedReader(new FileReader(logFile));
+			bw = new BufferedWriter(new FileWriter(logFile, true));
+			 // 파일이 있어야 작성을 하니.. 없으면 생성을 시키고, 헤더를 ㅁ나들고 작성 시작.
+			if(!logFile.exists()){
+				createFile();
+				createHeader(bw);
+			} else if(logFile.length() < 1){
+				createHeader(bw);
+			} else {
+				synchronized (br) {
+					bw.write(logMsg);
+					bw.newLine();
+					bw.flush();
+				}
 			}
-			synchronized (br) {
-				br.write(logMsg);
-				br.newLine();
-				br.flush();
-			}
+			
 		} catch (IOException e) {
 			//
 			e.printStackTrace();
@@ -87,16 +102,17 @@ public class LogFileHandler implements LogHandler {
 	 * @throws IOException
 	 * 로그파일 첫번째 헤드라인
 	 */
-	private void createHeader(BufferedWriter br) throws IOException {
+	private void createHeader(BufferedWriter bw) throws IOException {
 		//
 		StringBuffer sb = new StringBuffer();
 		sb.append("========================================================================\r\n");
 		sb.append("안녕하세요 SSI Logger입니다. 이건 I-HEART 신성인 사원이 만든거에요~\r\n");
 		sb.append("========================================================================");
 		
-		br.write(sb.toString());
-		br.newLine();
-		br.flush();
+		bw.write(sb.toString());
+		bw.newLine();
+		bw.flush();
+		bw.close();
 	}
 	
 }

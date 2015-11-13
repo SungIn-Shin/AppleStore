@@ -59,52 +59,57 @@ public class Logger {
 	
 	public void emerg(String logMsg){
 		//
-		format = new Format(LogLevel.EMERG, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+//		if(LogLevel.EMERG.isVisible()){
+//			format = new Format(LogLevel.EMERG, userIP, className);
+//			handler.append(format.getLogMsgFormat() + logMsg);
+//		}
+		appender(LogLevel.EMERG, logMsg);
 	}
+	
+
 	
 	public void alert(String logMsg){
 		//
-		format = new Format(LogLevel.ALERT, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.ALERT, logMsg);
 	}
 	
 	public void crit(String logMsg){
 		//
-		format = new Format(LogLevel.CRIT, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.CRIT, logMsg);
 	}
 	
 	public void error(String logMsg){
 		//
-		format = new Format(LogLevel.ERROR, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.ERROR, logMsg);
 	}
 	
 	public void warn(String logMsg){
 		//
-		format = new Format(LogLevel.WARN, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.WARN, logMsg);
 	}
 	
 	public void notice(String logMsg){
 		//
-		format = new Format(LogLevel.NOTICE, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.NOTICE, logMsg);
 	}
 	
 	public void info(String logMsg){
 		//
-		format = new Format(LogLevel.INFO, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.INFO, logMsg);
 	}
 	
 	public void debug(String logMsg){
 		//
-		format = new Format(LogLevel.DEBUG, userIP, className);
-		handler.append(format.getLogMsgFormat() + logMsg);
+		appender(LogLevel.DEBUG, logMsg);
 	}
 	
+	private void appender(LogLevel level, String logMsg){
+		//
+		if(level.isVisible()){
+			format = new Format(level, userIP, className);
+			handler.append(format.getLogMsgFormat()+logMsg);
+		}
+	}
 	
 	//getter, setter
 	public Level getLevel() {
