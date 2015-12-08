@@ -4,27 +4,28 @@ public class LogLevel {
 	private String name;
 	private int value;
 	private boolean visible;
+
 	
 	/*********************************************/
 	/***************** LogLevel ******************/
 	/*********************************************/
-	public static final LogLevel EMERG = new LogLevel("EMERG", Integer.MAX_VALUE, false);
+	public static final LogLevel EMERG = new LogLevel("EMERG", 800);
 	
-	public static final LogLevel ALERT = new LogLevel("ALERT", 600, true);
+	public static final LogLevel ALERT = new LogLevel("ALERT", 700);
 	
-	public static final LogLevel CRIT = new LogLevel("CRIT", 500, true);
+	public static final LogLevel CRIT = new LogLevel("CRIT", 600);
 	
-	public static final LogLevel ERROR = new LogLevel("ERROR", 400, true);
+	public static final LogLevel ERROR = new LogLevel("ERROR", 500);
 	
-	public static final LogLevel WARN = new LogLevel("WARN", 300, true);
+	public static final LogLevel WARN = new LogLevel("WARN", 400);
 	
-	public static final LogLevel NOTICE = new LogLevel("NOTICE", 200, true);
+	public static final LogLevel NOTICE = new LogLevel("NOTICE", 300);
 	
-	public static final LogLevel INFO = new LogLevel("NOTICE", 100, true);
+	public static final LogLevel INFO = new LogLevel("NOTICE", 200);
 	
-	public static final LogLevel DEBUG = new LogLevel("DEBUG", Integer.MIN_VALUE, true);
+	public static final LogLevel DEBUG = new LogLevel("DEBUG", 100);
 	
-	private LogLevel(String name, int value, boolean visible) {
+	private LogLevel(String name, int value) {
 		//
 		if(name == null){
 			try {
@@ -35,7 +36,6 @@ public class LogLevel {
 		}
 		this.name = name;
 		this.value = value;
-		this.visible = visible;
 	}
 	
 	// getter, setter
@@ -51,8 +51,6 @@ public class LogLevel {
 		this.visible = visible;
 	}
 	
-	
-
 	public void setName(String name) {
 		this.name = name;
 	}

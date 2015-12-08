@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -16,35 +18,52 @@ import com.iheart.ssi.exception.HTTP404Exception;
 import com.iheart.ssi.exception.HTTP405Exception;
 import com.iheart.ssi.exception.HTTP414Exception;
 import com.iheart.ssi.exception.HTTP505Exception;
+import com.iheart.ssi.logger.LogLevel;
 import com.iheart.ssi.logger.Logger;
 import com.iheart.ssi.util.PropertyLoader;
 
-public class HTTPHeaderControllerImpl implements HTTPHeaderController {
-	//
-	private static final Logger log = Logger.getLogger(HTTPHeaderControllerImpl.class);
+public class HTTPHeaderParserImpl implements HTTPHeaderParser {
+	
+	private static final Logger log = Logger.getLogger(HTTPHeaderParserImpl.class);
 	
 	private static PropertyLoader loader = PropertyLoader.getInstance(); // 프로퍼티를 읽어오는 객체
 	
-	private static final String FILE_HOME = loader.getProperty("FILE_HOME"); // 프로퍼티에 정의한 file_path를 불러온다.;
+	private static final String WEB_HOME = loader.getProperty("WEB_HOME"); // 프로퍼티에 정의한 file_path를 불러온다.;
 	
 	private static final String HTTP_VERSION = loader.getProperty("HTTP_VERSION"); // HTTP/1.1
+	
+	private static final String CHARSET = loader.getProperty("CHAR_SET");
 	
 	private static final String GET="GET";
 	
 	private static final String POST="POST";
 	
-	public HTTPHeaderControllerImpl() {
+	public HTTPHeaderParserImpl() {
+		
 	}
 
 	@Override
-	public Map<String, String> parseHTTPHeader(String reqData) {
+	public byte[] parseHTTPHeader(byte[] reqArr) {
 		//
-		//
+		String reqData = "";
+		try {
+			// byte[8190] 사이즈로 들어오기 때문에 trim()으로 공백을 제거한다.
+			// Window환경에서 접근 시 ISO-8859-1 charset으로 받는다.
+			reqData = new String(reqArr, CHARSET).trim();
+			// ISO-8859-1 -> UTF-8 로 Decodeing한다.
+			reqData = URLDecoder.decode(reqData, CHARSET);
+			
+		} catch (UnsupportedEncodingException e1) {
+			log.write(LogLevel.INFO, CHARSET + "은 지원하지 않는 Charset입니다.");
+		}
+		System.out.println("======REQUEST=====DATA==========");
+		System.out.println(reqData);
+		System.out.println("======REQUEST=====DATA==========");
+		
 		Map<String, String> responseMap = new LinkedHashMap<>();
 		responseMap.put("HTTP_VERSION", HTTP_VERSION);
 		responseMap.put("STATUS", "200 OK");
 		responseMap.put("Content-Type", "text/html; charset=UTF-8");
-		
 		try {
 			//
 			String header = "";
@@ -114,25 +133,25 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 			
 			// RequestMethod
 			String requestMethod = st.nextToken(); // GET, POST
-			System.out.println("METHOD : " + requestMethod);
-			// RequestURI   /index.html?hello=ged&name=djks
+			// RequestURI   /index.html?hello=안녕&name=이름
 			if(!st.hasMoreTokens()){
 				throw new NoSuchElementException();
 			}
 			String requestURI = st.nextToken(); // /index.html
 			
-			if(requestURI.length() >100){
+			// 테스트하기위해 임의의 수로 지정했음. 
+			if(requestURI.length() > 100){ 
 				throw new HTTP414Exception();
 			}
-			String requestFilePath = "";
-			String requestParam ="";
+			String requestFilePath = ""; //요청 파일 Path
+			String requestParam =""; // 요청 파라미터
 			if(requestURI.contains("?")){
 				// URI에서 0번째 인덱스에서 부터 가장 가까운 ?의 index를 반환
 				int index = requestURI.indexOf("?");
 				// /index.html?hello=ged&name=djks 의 0번째 인덱스부터 ?의 index 전까지 잘라서 반환
 				requestFilePath = requestURI.substring(0, index);
 				// URI의 ?가 위치하는 인덱스  다음 인덱스 부터 읽어서 반환
-				requestParam = requestURI.substring(index+1);
+				requestParam = requestURI;
 			} else {
 				requestFilePath = requestURI;
 			}
@@ -164,7 +183,10 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 			// 요청한 파일의 존재 유무를 검사한다. 없으면 404 ERROR
 			int fileSize = 0;
 			byte[] fileArr = null;
-			File file = new File(FILE_HOME + requestFilePath); 
+			// 상대경로 + 파일경로 + 파일명 = RELATIVE_PATH + FILE_HOME + requestFilePath
+			System.out.println(WEB_HOME + requestFilePath);
+			File file = new File(WEB_HOME + requestFilePath); 
+			System.out.println(file.isFile());
 			
 			if(!file.exists()){
 				//
@@ -185,8 +207,8 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 					Iterator<String> iter = param.keySet().iterator();
 					while(iter.hasNext()){
 						String key = iter.next();
-						log.debug("It's GET METHOD LOGGING");
-						log.debug("KEY : " + key + " , " + "VALUE : " + param.get(key));
+						log.write(LogLevel.DEBUG,"It's GET METHOD LOGGING");
+						log.write(LogLevel.DEBUG,"KEY : " + key + " , " + "VALUE : " + param.get(key));
 					}
 					
 				}
@@ -199,29 +221,30 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 				// 4. 읽어온 파일의 내용을 'BODY' 로 담는다.
 				responseMap.put("BODY", fileContent);
 				// 5. Map을 return한다.
-				return responseMap;
+				return makeProtocol(responseMap);
 			} else if(requestMethod.equals(POST)){
 				// RequestMethod = 'POST' 일때 처리
-				// 1. byte[]로 읽은 파일을 String으로 변환한다.
-				String fileContent = new String(fileArr, "UTF-8");
-				// 2. 파일의 길이를 Content-length : fileSize로 담는다.
-				responseMap.put("Content-length", String.valueOf(fileSize));
-				// 3. 읽어온 파일의 내용을 'BODY' 로 담는다.
-				responseMap.put("BODY", fileContent);
-				// 4. Protocol에서 읽은 Body를 분석   name=성인&age=25&sex=male
+				// 1. Protocol에서 읽은 Body를 분석   name=성인&age=25&sex=male
 				// &를 기준으로 key=value를 구분하고
 				// = 기준으로 key와 value를 구분해낸다.
 				// POST방식이면 BODY가 있어야 정상 Protocol이다.
+				StringBuffer sb = new StringBuffer();
 				if(!body.equals(null) || !body.equals("")){
 					Map<String, String> bodyParamMap = paramParser(body);
 					Iterator<String> iter = bodyParamMap.keySet().iterator();
 					while(iter.hasNext()){
 						String key = iter.next();
-						log.debug("It's POST METHOD LOGGING");
-						log.debug("KEY : " + key + " , " + "VALUE : "+bodyParamMap.get(key));
+						sb.append(key + " -> " + bodyParamMap.get(key));
+						sb.append("\r\n");
 					}
 				}
-				return responseMap;
+				// 2. 파일의 길이를 Content-length : POST방식으로 넘어온 파라미터를 담는다.
+				// POST일때는 text/plain으로 텍스트만 뿌려준다.
+				responseMap.put("Content-Type", "text/plain; charset=UTF-8");
+				responseMap.put("Content-length", String.valueOf(sb.toString().getBytes().length));
+				// 3. 읽어온 파일의 내용을 'BODY' 로 담는다.
+				responseMap.put("BODY", sb.toString());
+				return makeProtocol(responseMap);
 			} else { // GET, POST가 아닌 다른 값.
 				//
 				throw new HTTP405Exception();
@@ -251,7 +274,7 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 			responseMap.put("BODY", loader.getProperty("400"));
 		}
 		
-		return responseMap;
+		return makeProtocol(responseMap);
 	}
 
 	
@@ -296,8 +319,8 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 	 * =========================================================================
 	 * =============
 	 */
-	@Override
-	public byte[] createHTTPProtocol(Map<String, String> resData) { // statusLine, HTTP/1.1 200 OK
+	
+	private byte[] makeProtocol(Map<String, String> resData) { // statusLine, HTTP/1.1 200 OK
 		//
 		StringBuffer sb = new StringBuffer();
 		Iterator<String> iter = resData.keySet().iterator();
@@ -319,34 +342,10 @@ public class HTTPHeaderControllerImpl implements HTTPHeaderController {
 			}
 		}
 		System.out.println("================================================");
-		System.out.println("===================Response Protocol============");
 		System.out.println(sb.toString());
-		System.out.println("===================Response Protocol============");
 		System.out.println("================================================");
 		
 		
 		return sb.toString().getBytes();
 	}
-	
-	
-	 public static void main(String[] args) {
-	 /**
-	  * POST Method Test Case
-	  * **/
-	 StringBuffer sb = new StringBuffer();
-	 sb.append("POST /post.jsp HTTP/1.1\r\n");
-	 sb.append("Content-Type: text/html; charset=UTF-8\r\n");
-	 sb.append("\r\n");
-	 sb.append("name=성인&age=19");
-	 sb.append("&zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");	 
-	 /**
-	  * GET Method Test Case
-	  * **/
-//	 StringBuffer sb = new StringBuffer();
-//	 sb.append("GET /post.jsp?name=승찬&age=14 HTTP/1.1\r\n");
-//	 sb.append("Content-Type: text/html; charset=UTF-8\r\n");
-//	 sb.append("\r\n");
-	 HTTPHeaderControllerImpl p = new HTTPHeaderControllerImpl();
-	 System.out.println(p.createHTTPProtocol(p.parseHTTPHeader(sb.toString())));
-	 }
 }

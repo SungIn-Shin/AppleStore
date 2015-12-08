@@ -5,28 +5,42 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class PropertyLoader {
 	private Properties properties;
-	private static final String PROP_FILEPATH = "D:\\Git\\AppleStore\\SSI_HTTP_Project\\src\\com\\iheart\\ssi\\prop\\ssi.properties";
-	private static final PropertyLoader loader = new PropertyLoader();
+//	private static final String PROP_FILEPATH = System.getProperty("user.dir") + "\\ssi.properties";
+	//private static final String PROP_FILEPATH ="ssi.properties"; //절대경로로 바꿀거임.
+	private static PropertyLoader loader;
+	
 	
 	private PropertyLoader(){
-		try {
 			properties = new Properties();
-			properties.load(new BufferedReader(new InputStreamReader(new FileInputStream(PROP_FILEPATH), "UTF-8")));
+	}
+	
+	public void setConfig(String propPath, String logPath, String webPath){
+		
+		try {
+			properties.load(new BufferedReader(new InputStreamReader(new FileInputStream(propPath), "UTF-8")));
+			properties.setProperty("LOG_HOME", logPath);
+			properties.setProperty("WEB_HOME", webPath);
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			//
+			System.out.println(propPath + "파일을 찾을 수 없습니다. " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			//
 			e.printStackTrace();
 		}
 	}
 	
-	public static PropertyLoader getInstance(){
+	public static synchronized PropertyLoader getInstance(){
 		//
+		if(loader == null){
+			loader = new PropertyLoader();
+		}
 		return loader;
 	}
 	
@@ -37,6 +51,4 @@ public class PropertyLoader {
 	public String getProperty(String key){
 		return properties.getProperty(key);
 	}
-	
-	
 }

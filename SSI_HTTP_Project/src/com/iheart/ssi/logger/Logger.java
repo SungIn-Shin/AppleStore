@@ -1,16 +1,22 @@
 package com.iheart.ssi.logger;
 
-import java.util.logging.Level;
+import com.iheart.ssi.util.PropertyLoader;
 
 public class Logger {
 	//
 	private volatile static Logger logger;
 	
-	private Level level;
 	private LogHandler handler;
 	private Format format;
-	private String userIP = "127.0.0.1";
 	private String className;
+	////////////////////////////////////////////////////////////////////////////////////
+	// ssi.properties를 읽어올 객체
+	public static final PropertyLoader loader = PropertyLoader.getInstance();
+	// 표시할 LogLevel
+	// ssi.properties의 VISIBLE_LOG_LEVEL=? 에서 가져온다.
+	public static final int VISIBLE_LOG_LEVEL = Integer.parseInt(loader.getProperty("VISIBLE_LOG_LEVEL"));
+	// 유동헤더
+	public static final String DYNAMIC_HEADER = loader.getProperty("DYNAMIC_HEADER");
 	
 	private <T> Logger(Class<T> clazz){
 		this.className = clazz.getName();
@@ -44,83 +50,19 @@ public class Logger {
 		return logger;
 	}
 	
-	/**
-	 * @param args
-	 * TestMain
-	 */
-//	public static void main(String[] args) {
-////		Logger logger = Logger.getLogger();
-////		LogHandler handler = new LogFileHandler();
-////		logger.addHandler(handler);
-////		
-////		logger.debug("헤헤 이건 디버그.");
-////		logger.emerg("헤헤 이건 EMERG");
-//	}
-	
-	public void emerg(String logMsg){
+	public void write(LogLevel level, String logMsg){
 		//
-//		if(LogLevel.EMERG.isVisible()){
-//			format = new Format(LogLevel.EMERG, userIP, className);
-//			handler.append(format.getLogMsgFormat() + logMsg);
-//		}
-		appender(LogLevel.EMERG, logMsg);
-	}
-	
-
-	
-	public void alert(String logMsg){
-		//
-		appender(LogLevel.ALERT, logMsg);
-	}
-	
-	public void crit(String logMsg){
-		//
-		appender(LogLevel.CRIT, logMsg);
-	}
-	
-	public void error(String logMsg){
-		//
-		appender(LogLevel.ERROR, logMsg);
-	}
-	
-	public void warn(String logMsg){
-		//
-		appender(LogLevel.WARN, logMsg);
-	}
-	
-	public void notice(String logMsg){
-		//
-		appender(LogLevel.NOTICE, logMsg);
-	}
-	
-	public void info(String logMsg){
-		//
-		appender(LogLevel.INFO, logMsg);
-	}
-	
-	public void debug(String logMsg){
-		//
-		appender(LogLevel.DEBUG, logMsg);
-	}
-	
-	private void appender(LogLevel level, String logMsg){
-		//
-		if(level.isVisible()){
-			format = new Format(level, userIP, className);
-			handler.append(format.getLogMsgFormat()+logMsg);
+		if(level.getValue() >= VISIBLE_LOG_LEVEL){
+			format = new Format();
+			StringBuffer logHeader = new StringBuffer(); // Thread-safe
+			logHeader.append(format.getLogTimePattern() + " "); 
+			logHeader.append("[").append(level.getName()).append("]");
+			logHeader.append("[").append(DYNAMIC_HEADER).append("]");
+			logHeader.append(" " + className + " ");
+			handler.append(logHeader.toString()+logMsg);
 		}
 	}
 	
-	//getter, setter
-	public Level getLevel() {
-		return level;
-	}
-
-	public void setLevel(Level level) {
-		this.level = level;
-	}
-
-
 	public void addHandler(LogHandler handler) {
 		this.handler = handler;
 	}

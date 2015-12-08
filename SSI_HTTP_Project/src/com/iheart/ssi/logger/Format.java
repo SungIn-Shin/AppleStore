@@ -12,36 +12,12 @@ public class Format {
 	 */
 	PropertyLoader prop = PropertyLoader.getInstance();
 	private SimpleDateFormat formatter;
-	private LogLevel level;
-	private String userIP;
-	private String className;
 	
 	/**
 	 * 
 	 */
 	public Format(){}
 	
-	/**
-	 * Log 작성되는 메세지 Format
-	 * @param level
-	 * @param userIP 
-	 */
-	public Format(LogLevel level, String userIP, String className){
-		this.level = level;
-		this.userIP = userIP;
-		this.className = className;
-	}
-	
-	// *HH:24:MI.SS.MS * [Log Header] [유동 Header]
-	public String getLogMsgFormat(){
-		//
-		StringBuffer sb = new StringBuffer(); // Thread-safe
-		sb.append(getLogTimePattern() + " ");
-		sb.append("[").append(level.getName()).append("]");
-		sb.append("[").append(userIP).append("]");
-		sb.append(" " + className + " ");
-		return sb.toString();
-	}
 	
 	/**
 	 * @return 로그 시간 형식
@@ -57,6 +33,7 @@ public class Format {
 	 */
 	public String getLogFilePattern(){
 		formatter = new SimpleDateFormat(prop.getProperty("file_name_pattern"));
+		//System.out.println("날짜 : " + formatter.format(new Date()));
 		return formatter.format(new Date());
 	}
 	
