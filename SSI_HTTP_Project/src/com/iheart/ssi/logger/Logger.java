@@ -1,6 +1,12 @@
 package com.iheart.ssi.logger;
 
-import com.iheart.ssi.util.PropertyLoader;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 public class Logger {
 	//
@@ -9,17 +15,13 @@ public class Logger {
 	private LogHandler handler;
 	private Format format;
 	private String className;
-	////////////////////////////////////////////////////////////////////////////////////
-	// ssi.properties를 읽어올 객체
-	public static final PropertyLoader loader = PropertyLoader.getInstance();
+	private String dynamic_log_header;
+	private Properties loader;
 	// 표시할 LogLevel
-	// ssi.properties의 VISIBLE_LOG_LEVEL=? 에서 가져온다.
-	public static final int VISIBLE_LOG_LEVEL = Integer.parseInt(loader.getProperty("VISIBLE_LOG_LEVEL"));
-	// 유동헤더
-	public static final String DYNAMIC_HEADER = loader.getProperty("DYNAMIC_HEADER");
 	
 	private <T> Logger(Class<T> clazz){
 		this.className = clazz.getName();
+		format = new Format();
 	}
 	
 	/**
@@ -43,7 +45,6 @@ public class Logger {
 			synchronized (Logger.class) {
 				if(logger == null){
 					logger = new Logger(clazz);
-					logger.addHandler(new LogFileHandler()); //강제주입
 				}
 			}
 		}
@@ -52,19 +53,43 @@ public class Logger {
 	
 	public void write(LogLevel level, String logMsg){
 		//
-		if(level.getValue() >= VISIBLE_LOG_LEVEL){
+		int visible_log_level = Integer.parseInt(loader.getProperty("visible_log_level").trim());
+		String logging_time = format.getLogTimePattern(loader.getProperty("log_time_pattern"));
+		
+		if(level.getValue() >= visible_log_level){
 			format = new Format();
 			StringBuffer logHeader = new StringBuffer(); // Thread-safe
-			logHeader.append(format.getLogTimePattern() + " "); 
-			logHeader.append("[").append(level.getName()).append("]");
-			logHeader.append("[").append(DYNAMIC_HEADER).append("]");
-			logHeader.append(" " + className + " ");
-			handler.append(logHeader.toString()+logMsg);
+			logHeader.append("[").append(logging_time).append("]");
+			logHeader.append(" [").append(level.getName()).append("]");
+			// 유동헤더 설정 부분
+			logHeader.append("[");
+			logHeader.append(className);
+			logHeader.append(dynamic_log_header);
+			logHeader.append("]");
+			
+			handler.append(logHeader.toString()+"\t"+logMsg);
+		}
+	}
+	
+	public void setProperty(String log_conf_path){
+		loader = new Properties();
+		try {
+			loader.load(new BufferedReader(new InputStreamReader(new FileInputStream(log_conf_path), "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void addHandler(LogHandler handler) {
 		this.handler = handler;
+	}
+
+	public void setDynamicLogHeader(String dynamic_log_header) {
+		this.dynamic_log_header = dynamic_log_header;
 	}
 	
 }

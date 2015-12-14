@@ -1,9 +1,11 @@
 package com.iheart.ssi.httpparser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import com.iheart.ssi.exception.HTTP400Exception;
@@ -18,28 +21,36 @@ import com.iheart.ssi.exception.HTTP404Exception;
 import com.iheart.ssi.exception.HTTP405Exception;
 import com.iheart.ssi.exception.HTTP414Exception;
 import com.iheart.ssi.exception.HTTP505Exception;
-import com.iheart.ssi.logger.LogLevel;
-import com.iheart.ssi.logger.Logger;
-import com.iheart.ssi.util.PropertyLoader;
 
 public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 	
-	private static final Logger log = Logger.getLogger(HTTPHeaderParserImpl.class);
+	private Properties loader;
+
+	private String web_inf_path;
 	
-	private static PropertyLoader loader = PropertyLoader.getInstance(); // 프로퍼티를 읽어오는 객체
+	private String http_version; // HTTP/1.1
 	
-	private static final String WEB_HOME = loader.getProperty("WEB_HOME"); // 프로퍼티에 정의한 file_path를 불러온다.;
-	
-	private static final String HTTP_VERSION = loader.getProperty("HTTP_VERSION"); // HTTP/1.1
-	
-	private static final String CHARSET = loader.getProperty("CHAR_SET");
+	private String char_set;
 	
 	private static final String GET="GET";
 	
 	private static final String POST="POST";
 	
-	public HTTPHeaderParserImpl() {
-		
+	public HTTPHeaderParserImpl(String web_inf_path, String http_conf_path) {
+		//
+		try {
+			this.web_inf_path=web_inf_path;
+			loader = new Properties();
+			loader.load(new BufferedReader(new InputStreamReader(new FileInputStream(http_conf_path), "UTF-8")));
+			http_version = loader.getProperty("http_version");
+			char_set = loader.getProperty("char_set");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();  
+		}
 	}
 
 	@Override
@@ -49,19 +60,19 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 		try {
 			// byte[8190] 사이즈로 들어오기 때문에 trim()으로 공백을 제거한다.
 			// Window환경에서 접근 시 ISO-8859-1 charset으로 받는다.
-			reqData = new String(reqArr, CHARSET).trim();
+			reqData = new String(reqArr, char_set).trim();
 			// ISO-8859-1 -> UTF-8 로 Decodeing한다.
-			reqData = URLDecoder.decode(reqData, CHARSET);
+			reqData = URLDecoder.decode(reqData, char_set);
 			
 		} catch (UnsupportedEncodingException e1) {
-			log.write(LogLevel.INFO, CHARSET + "은 지원하지 않는 Charset입니다.");
+			e1.printStackTrace();
 		}
-		System.out.println("======REQUEST=====DATA==========");
+		System.out.println("======"+this.getClass().getName()+"======");
 		System.out.println(reqData);
 		System.out.println("======REQUEST=====DATA==========");
 		
 		Map<String, String> responseMap = new LinkedHashMap<>();
-		responseMap.put("HTTP_VERSION", HTTP_VERSION);
+		responseMap.put("HTTP_VERSION", http_version);
 		responseMap.put("STATUS", "200 OK");
 		responseMap.put("Content-Type", "text/html; charset=UTF-8");
 		try {
@@ -95,7 +106,7 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 			// 상태문과 본문을 분리한다.
 			// ==============================
 			// |	헤더의 상태문(Status_Line)	|
-			// |	헤더 본문(Field)			|
+			// |	헤더 본문(Field: FieldValue	|
 			// |	비어있는 라인("\r\n")		|
 			// |	진짜 바디(<HTML></HTML>)	|
 			// ==============================
@@ -175,7 +186,7 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 			
 			// HTTP VERSION 확인
 			// HTTP/1.1(지원하는 버전)이 아니면
-			if (!requestHttpVersion.equals(HTTP_VERSION)) {
+			if (!requestHttpVersion.equals(http_version)) {
 				throw new HTTP505Exception();
 			}
 			
@@ -183,9 +194,10 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 			// 요청한 파일의 존재 유무를 검사한다. 없으면 404 ERROR
 			int fileSize = 0;
 			byte[] fileArr = null;
-			// 상대경로 + 파일경로 + 파일명 = RELATIVE_PATH + FILE_HOME + requestFilePath
-			System.out.println(WEB_HOME + requestFilePath);
-			File file = new File(WEB_HOME + requestFilePath); 
+			// web_home = WEB-INF폴더의 경로
+			// requestFilePath = /index.html 등등 요청 파일 경로
+			System.out.println(web_inf_path + requestFilePath);
+			File file = new File(web_inf_path + requestFilePath); 
 			System.out.println(file.isFile());
 			
 			if(!file.exists()){
@@ -195,9 +207,9 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 				//
 				fileSize = (int) file.length();
 				fileArr = new byte[fileSize];
-				@SuppressWarnings("resource")
 				FileInputStream fis = new FileInputStream(file);
 				fis.read(fileArr);
+				fis.close();
 			}
 			
 			if(requestMethod.equals(GET)){
@@ -207,10 +219,8 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 					Iterator<String> iter = param.keySet().iterator();
 					while(iter.hasNext()){
 						String key = iter.next();
-						log.write(LogLevel.DEBUG,"It's GET METHOD LOGGING");
-						log.write(LogLevel.DEBUG,"KEY : " + key + " , " + "VALUE : " + param.get(key));
+						System.out.println("KEY : " + key + " , " + "VALUE : " + param.get(key));
 					}
-					
 				}
 				// RequestMethod = 'GET' 일때 처리
 				// 1. byte[]로 읽은 파일을 String으로 변환한다.
@@ -314,7 +324,6 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 	 * 들어가기 때문에 Map에도 순서대로 넣어서 출력한다. ex) HTTP/1.1 200 OK\r\n LinkedHashMap에는 여러
 	 * 데이터가 key:value로 맵핑이 되어있는데 body를 제외하고는 다 Header에 들어갈 값들이기 때문에 key: value로
 	 * 넣어주고
-	 * 
 	 * body와 Header를 구분하기위해 key값이 body일때 \r\n로 개행을 시켜서 프로토콜을 완성시키고 byte[]로 반환한다.
 	 * =========================================================================
 	 * =============
@@ -341,11 +350,9 @@ public class HTTPHeaderParserImpl implements HTTPHeaderParser {
 				sb.append(key).append(": ").append(resData.get(key)).append("\r\n");
 			}
 		}
-		System.out.println("================================================");
-		System.out.println(sb.toString());
-		System.out.println("================================================");
-		
-		
+//		System.out.println("================================================");
+//		System.out.println(sb.toString());
+//		System.out.println("================================================");
 		return sb.toString().getBytes();
 	}
 }

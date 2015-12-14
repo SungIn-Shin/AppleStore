@@ -7,23 +7,20 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import com.iheart.ssi.logger.LogLevel;
-import com.iheart.ssi.logger.Logger;
-
 public class SocketMain {
 	//
-	private static final Logger logger = Logger.getLogger(SocketMain.class);
+	//private static final Logger logger = Logger.getLogger(SocketMain.class);
 	
 	public int read(InputStream input, byte[] reqArr){
 		int readCount = 0;
 		try {
 			readCount = input.read(reqArr);
 		} catch(SocketTimeoutException e){
-			logger.write(LogLevel.ERROR, "[SocketTimeOutException] -> " + e.getMessage());
+			System.out.println("[SocketTimeOutException] -> " + e.getMessage());
 		} catch(SocketException e){
-			logger.write(LogLevel.ERROR, "[클라이언트 접속 종료]");
+			System.out.println("[클라이언트 접속 종료]");
 		} catch (IOException e) {
-			logger.write(LogLevel.ERROR, e.getMessage());
+			System.out.println(e.getMessage());
 		}
 		return readCount;
 	}
@@ -51,9 +48,9 @@ public class SocketMain {
 			output.flush();
 			output.close();
 		} catch(SocketException e){
-			logger.write(LogLevel.ERROR, "[소켓 연결 종료로 인한 write Error]");
+			System.out.println("[소켓 연결 종료로 인한 write Error]");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -68,9 +65,9 @@ public class SocketMain {
 			output.write(writeArr);
 			output.flush();
 		} catch(SocketException e){
-			logger.write(LogLevel.ERROR, "[소켓 연결 종료로 인한 write Error]");
+			System.out.println("[소켓 연결 종료로 인한 write Error]");
 		} catch (IOException e) {
-			logger.write(LogLevel.ERROR, "[소켓 연결 종료로 인한 write Error]");
+			System.out.println("[소켓 연결 종료로 인한 write Error]");
 		}
 	}
 }

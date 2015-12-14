@@ -1,27 +1,52 @@
 package com.iheart.ssi.logger;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import com.iheart.ssi.util.PropertyLoader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 public class LogFileHandler implements LogHandler {
 	//
-	private String filePath;
-	private String fileName;
+	private String logFilePath;
+	private String logFileName;
 	private String fileNamePattern;
 	private File logFileFolder, logFile;
-	private PropertyLoader prop = PropertyLoader.getInstance();
 	private Format format;
+	private Properties logProperties;
 	
-	public LogFileHandler() {
+	public LogFileHandler(){
+		
+	}
+	
+	public LogFileHandler(String log_conf_path) {
 		//
-		filePath = prop.getProperty("LOG_HOME");
-		fileName = prop.getProperty("log_file_name");
-		format = new Format();
-		isExistFile();
+		logProperties = new Properties();
+		try {
+			logProperties.load(new BufferedReader(new InputStreamReader(new FileInputStream(log_conf_path), "UTF-8")));
+			this.logFilePath = logProperties.getProperty("log_file_path");
+			this.logFileName = logProperties.getProperty("log_file_name");
+			format = new Format();
+			fileNamePattern = format.getLogFilePattern(logProperties.getProperty("file_name_pattern"));
+			isExistFile();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//LogFileName 설정 - Default = SSI_LOG_
+	public void setFileName(String fileName){
+		this.logFileName = fileName;
 	}
 	
 	/** (non-Javadoc)
@@ -32,7 +57,7 @@ public class LogFileHandler implements LogHandler {
 		//
 		isExistFile();
 		
-		fileNamePattern = format.getLogFilePattern();
+		
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new FileWriter(logFile, true));
@@ -49,7 +74,7 @@ public class LogFileHandler implements LogHandler {
 		} catch (IOException e) {
 			//
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	
@@ -60,11 +85,10 @@ public class LogFileHandler implements LogHandler {
 	private void isExistFile(){
 		// 로그 파일 폴더 경로
 		// D:/HTTP/log_file/
-		fileNamePattern = format.getLogFilePattern();
-		logFileFolder = new File(filePath);
+		logFileFolder = new File(logFilePath);
 		// 생성할 로그 파일
 		// D:/HTTP/log_file/SSI_HTTP_2015-11-09.log
-		logFile = new File(filePath + fileName + fileNamePattern + ".log");
+		logFile = new File(logFilePath + logFileName + fileNamePattern + ".log");
 		BufferedWriter bw = null;
 		try {
 			

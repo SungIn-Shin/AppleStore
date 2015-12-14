@@ -17,6 +17,15 @@ public class PropertyLoader {
 	
 	private PropertyLoader(){
 			properties = new Properties();
+			try {
+				properties.load(new BufferedReader(new InputStreamReader(new FileInputStream("D:\\Git\\AppleStore\\SSI_HTTP_Project\\ssi.properties"), "UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	public void setConfig(String propPath, String logPath, String webPath){
@@ -25,7 +34,6 @@ public class PropertyLoader {
 			properties.load(new BufferedReader(new InputStreamReader(new FileInputStream(propPath), "UTF-8")));
 			properties.setProperty("LOG_HOME", logPath);
 			properties.setProperty("WEB_HOME", webPath);
-			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -35,7 +43,7 @@ public class PropertyLoader {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static synchronized PropertyLoader getInstance(){
 		//
 		if(loader == null){
