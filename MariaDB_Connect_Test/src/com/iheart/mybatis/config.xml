@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!-- 	<properties resource="D:/dbprop.properties"/> -->
+	
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="User" type="com.iheart.mybatis.User" />
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="org.mariadb.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://192.168.100.33:3306/SSI" />
+				<property name="username" value="tlstjddls123" />
+				<property name="password" value="tjddls123" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="com/iheart/mybatis/User.xml" />
+	</mappers>
+</configuration>

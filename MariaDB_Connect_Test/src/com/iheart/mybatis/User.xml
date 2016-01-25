@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+	<select id="selectAll" resultType="User">
+		SELECT * FROM TEST_USER_UNAUTO
+	</select>
+	
+	<insert id="insertUser" parameterType="User">
+		INSERT INTO TEST_USER_UNAUTO
+			(USER_NAME, USER_NICK, USER_AGE, USER_TEL, USER_PHONE, USER_ADDRESS, 
+			USER_HOBBY1, USER_HOBBY2, USER_HOBBY3)
+		VALUES
+			(#{userName}, #{userNick}, #{userAge}, #{userTel}, #{userPhone}, #{userAddress},
+			#{userHobby1}, #{userHobby2}, #{userHobby3})
+	</insert>
+	
+</mapper>
